@@ -17,10 +17,16 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start:dev": "node ./scripts/build.js --env=dev && react-scripts start",
+    "start:prod": "node ./scripts/build.js --env=prod && react-scripts start",
+    "start:test": "node ./scripts/build.js --env=test && react-scripts start",
+    "build:dev": "node ./scripts/build.js --env=dev && react-scripts build",
+    "build:test": "node ./scripts/build.js --env=test && react-scripts build",
+    "build:prod": "node ./scripts/build.js --env=prod && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "commit": "./node_modules/cz-customizable/standalone.js"
+
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +45,17 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "yaml": "^2.2.1",
+    "cz-customizable": "^7.0.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": ".cz.config.js"
+    }
   }
 }
