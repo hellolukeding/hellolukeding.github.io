@@ -9,6 +9,7 @@ specifiers:
   '@types/react': ^18.0.38
   '@types/react-dom': ^18.0.11
   cz-customizable: ^7.0.0
+  minimist: ^1.2.8
   react: ^18.2.0
   react-dom: ^18.2.0
   react-scripts: 5.0.1
@@ -32,6 +33,7 @@ dependencies:
 
 devDependencies:
   cz-customizable: registry.npmmirror.com/cz-customizable/7.0.0
+  minimist: registry.npmmirror.com/minimist/1.2.8
   yaml: registry.npmmirror.com/yaml/2.2.1
 
 packages:
