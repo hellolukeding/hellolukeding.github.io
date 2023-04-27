@@ -26,7 +26,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "commit": "./node_modules/cz-customizable/standalone.js"
-
   },
   "eslintConfig": {
     "extends": [
@@ -47,8 +46,9 @@
     ]
   },
   "devDependencies": {
-    "yaml": "^2.2.1",
-    "cz-customizable": "^7.0.0"
+    "cz-customizable": "^7.0.0",
+    "minimist": "^1.2.8",
+    "yaml": "^2.2.1"
   },
   "config": {
     "commitizen": {
