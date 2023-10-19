@@ -22,7 +22,6 @@
     "baseUrl": "./",
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "suppressImplicitAnyIndexErrors": true,
     "importHelpers": true,
     "allowUnreachableCode": true,
     "alwaysStrict": true

@@ -1,0 +1,15 @@
+@import "src/style";
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  background: #272822;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  font-style: italic;
+  font-size: 40px;
+  letter-spacing: 5px;
+  @include flex(center, center, column);
+
+
+}
