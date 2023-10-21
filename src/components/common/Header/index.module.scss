@@ -1,0 +1,45 @@
+@import "src/style";
+
+.header {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  z-index: 999;
+  height: vh(70);
+  padding: vh(20) vw(40);
+  box-sizing: border-box;
+  @include flex(space-between, center);
+}
+
+.icon {
+  width: auto;
+  font-size: 24px;
+
+  svg {
+    margin: 0 vw(8);
+    cursor: pointer;
+
+    &:hover {
+      animation: jump 1s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-10px) scale(1.2);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.logo {
+  font-family: 'Dancing Script', cursive;
+}

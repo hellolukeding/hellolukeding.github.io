@@ -10,6 +10,5 @@
   font-size: 40px;
   letter-spacing: 5px;
   @include flex(center, center, column);
-
-
+  user-select: none;
 }
