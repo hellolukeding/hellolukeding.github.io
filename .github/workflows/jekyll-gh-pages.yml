@@ -26,7 +26,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           publish_dir: ./build # 3.打包后文件的输出目录(根据你自己的项目情况而定)
-          github_token: ${{ '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' }} # 4.刚才你C下来的仓库token秘钥!!!
+          github_token: ${{ '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' }} # 4.刚才你C下来的仓库token秘钥!!!
           user_name: ${{ secrets.MY_USER_NAME }} # 不用改
           user_email: ${{ secrets.MY_USER_EMAIL }} # 不用改
           commit_message: 自动部署 # 5.部署时的 git 提交信息，自由填写
