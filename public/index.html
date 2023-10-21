@@ -26,9 +26,21 @@
     -->
     <title>React App</title>
     <script src="%PUBLIC_URL%/js/config.js"></script>
+    <script>
+      window.ga =
+        window.ga ||
+        function () {
+          (ga.q = ga.q || []).push(arguments);
+        };
+      ga.l = +new Date();
+      ga("create", "UA-105392568-1", "auto");
+      ga("send", "pageview");
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script src="https://api.vvhan.com/api/snow"></script>
+
     <div id="root"></div>
     <!--
       This HTML file is a template.

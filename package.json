@@ -52,7 +52,8 @@
   "devDependencies": {
     "cz-customizable": "^7.0.0",
     "minimist": "^1.2.8",
-    "yaml": "^2.2.1"
+    "yaml": "^2.2.1",
+    "commitizen": "4.3.0"
   },
   "config": {
     "commitizen": {
