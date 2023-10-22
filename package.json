@@ -14,7 +14,8 @@
     "build:prod": "node ./scripts/build.js --env=prod && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "commit": "./node_modules/cz-customizable/standalone.js"
+    "commit": "./node_modules/cz-customizable/standalone.js",
+    "precommit": "npm run predeploy && npm run deploy"
   },
   "eslintConfig": {
     "extends": [
