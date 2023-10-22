@@ -19,8 +19,8 @@ jobs:
         with:
           node-version: '16.x'
       - run: npm install # 安装依赖
-      - run: npm run build:predeploy # 打包
-      - run: npm run build:deploy # 打包
+      - run: npm run predeploy # 打包
+      - run: npm run deploy # 打包
   deploy:
     runs-on: ubuntu-latest
     needs: build
