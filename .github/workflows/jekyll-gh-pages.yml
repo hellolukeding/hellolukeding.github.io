@@ -19,8 +19,8 @@ jobs:
         with:
           node-version: '16.x'
       - run: npm install # 安装依赖
-      - run: npm run predeploy # 打包
-      - run: npm run deploy # 打包
+      - run: npm run build:prod # 打包
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -33,7 +33,7 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: ./ # 3.打包后文件的输出目录(根据你自己的项目情况而定)
+          publish_dir: ./build # 3.打包后文件的输出目录(根据你自己的项目情况而定)
           github_token: ${{ secrets.GITHUB_TOKEN }} # 4.刚才你C下来的仓库token秘钥!!!
           user_name: ${{ secrets.MY_USER_NAME }} # 不用改
           user_email: ${{ secrets.MY_USER_EMAIL }} # 不用改
