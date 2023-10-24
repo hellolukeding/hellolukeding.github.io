@@ -18,11 +18,8 @@ jobs:
         with:
           node-version: '16.x'
       - run: npm install
-      - run: npm run predeploy
-      - run: npm run deploy
-        env:
-          CI: true
-
+      - run: npm run build
+      
   deploy:
     runs-on: ubuntu-latest
     needs: build
