@@ -2,15 +2,14 @@ name: deploy
 
 on:
   push:
-    branches: [main] # 1.这里是你当前主分支的名字,我这里是main,你的可能是master
+    branches: [main]
     paths-ignore:
-      - README.md ## 2.表示该文件更新不会触发Github Actions部署,自行配置即可
+      - README.md
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -18,8 +17,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16.x'
-      - run: npm install # 安装依赖
-      - run: npm run build:prod # 打包
+      - run: npm install
+      - run: npm run predeploy
+      - run: npm run deploy
+        env:
+          CI: true
 
   deploy:
     runs-on: ubuntu-latest
@@ -28,13 +30,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: gh-pages
+          ref: gh-pages # Verify that this is the correct branch for your website
           fetch-depth: 0
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: ./build # 3.打包后文件的输出目录(根据你自己的项目情况而定)
-          github_token: ${{ secrets.GITHUB_TOKEN }} # 4.刚才你C下来的仓库token秘钥!!!
-          user_name: ${{ secrets.USER_NAME }} # 不用改
-          user_email: ${{ secrets.USER_EMAIL }} # 不用改
-          commit_message: 自动部署 # 5.部署时的 git 提交信息，自由填写
+          publish_dir: ./build
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          user_name: ${{ secrets.USER_NAME }}
+          user_email: ${{ secrets.USER_EMAIL }}
+          commit_message: 自动部署
+      - name: List files in gh-pages branch # Add this step to verify that the files are being deployed correctly
+        run: |
+          git fetch --prune --unshallow
+          git checkout gh-pages
+          ls -la
