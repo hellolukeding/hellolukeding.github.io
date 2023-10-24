@@ -37,8 +37,3 @@ jobs:
           user_name: ${{ secrets.USER_NAME }}
           user_email: ${{ secrets.USER_EMAIL }}
           commit_message: 自动部署
-      - name: List files in gh-pages branch # Add this step to verify that the files are being deployed correctly
-        run: |
-          git fetch --prune --unshallow
-          git checkout gh-pages
-          ls -la
