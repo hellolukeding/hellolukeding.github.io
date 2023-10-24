@@ -7,26 +7,29 @@ on:
       - README.md ## 2.表示该文件更新不会触发Github Actions部署,自行配置即可
 
 jobs:
-  deploy:
+  Build:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Build
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
-      - run: npm install # 安装依赖
-      - run: npm run build # 打包
-
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          publish_dir: ./build # 3.打包后文件的输出目录(根据你自己的项目情况而定)
-          github_token: ${{ secrets.GITHUB_TOKEN }} # 4.刚才你C下来的仓库token秘钥!!!
-          user_name: ${{ secrets.MY_USER_NAME }} # 不用改
-          user_email: ${{ secrets.MY_USER_EMAIL }} # 不用改
-          commit_message: 自动部署 # 5.部署时的 git 提交信息，自由填写
+    - name: checkout code
+      uses: actions/checkout@v3
+    - name: actions/setup-node@v3
+      uses: actions/setup-node@v3   
+      with:
+        node-version: '16.x'
+    # 配置依赖缓存
+    - name: yarn cache
+      id: yarn-cahce-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - uses: actions/cache@v2
+      id: yarn-cache
+      with: 
+        path: ${{ steps.yarn-cahce-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: | 
+          ${{ runner.os }}-yarn-
+    - run: yarn install && yarn build
+    - name: deploy
+      uses: JamesIves/github-pages-deploy-action@v4.2.3
+      with:
+        branch: gh-pages 
+        folder: build   # build后文件目录
