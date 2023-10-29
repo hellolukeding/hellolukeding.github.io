@@ -1,0 +1,9 @@
+@import "src/style";
+
+.wel {
+  @include flex(center, center, column);
+
+  img {
+    max-width: vw(200);
+  }
+}

@@ -12,3 +12,9 @@
   @include flex(center, center, column);
   user-select: none;
 }
+
+.content {
+  width: 100vw;
+  height: calc(100vh - vh(70));
+  @include flex(center, center, column);
+}
