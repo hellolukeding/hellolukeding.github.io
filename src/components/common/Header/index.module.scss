@@ -14,17 +14,49 @@
 
 .icon {
   width: auto;
-  font-size: 24px;
+  font-size: 18px;
+  @include flex(flex-start, center);
+
+
+}
+
+.item {
+  @include flex(flex-start, center);
+  padding: vh(5) 0;
+  box-sizing: content-box;
+  margin: 0 vw(14);
+  cursor: pointer;
+
+  &:hover {
+    animation: colorful 0.8s ease-in-out;
+    animation-fill-mode: forwards;
+  }
 
   svg {
-    margin: 0 vw(8);
-    cursor: pointer;
-
-    &:hover {
-      animation: jump 1s ease-in-out infinite;
-    }
+    margin-right: vw(10);
   }
 }
+
+.active-item {
+  border-bottom: 2px solid #FFCA3A;
+  color: #FFCA3A;
+}
+
+/*--------------------------------------- annimation ------------------------------------------*/
+@keyframes colorful {
+  0% {
+    color: #ffca3a3b;
+  }
+
+  50% {
+    color: #ffca3aa1;
+  }
+
+  100% {
+    color: #FFCA3A;
+  }
+}
+
 
 @keyframes jump {
   0% {
