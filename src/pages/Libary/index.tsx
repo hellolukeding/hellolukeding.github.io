@@ -7,6 +7,7 @@ const Libary: React.FC<LibaryProps> = (props) => {
       src="https://virtual.mauritshuis.nl/index.html?lang=en&startscene=21"
       frameBorder="0"
       className={styles["music"]}
+      title="libary"
     ></iframe>
   );
 };

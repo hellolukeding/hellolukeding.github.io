@@ -7,6 +7,7 @@ const Music: React.FC<MusicProps> = (props) => {
       src="https://music.ishkur.com/"
       frameBorder="0"
       className={styles["music"]}
+      title="music"
     ></iframe>
   );
 };

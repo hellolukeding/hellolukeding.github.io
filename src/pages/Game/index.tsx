@@ -7,6 +7,7 @@ const Game: React.FC<GameProps> = (props) => {
       src="https://v6p9d9t4.ssl.hwcdn.net/html/5185382/index.html"
       frameBorder="0"
       className={styles["music"]}
+      title="game"
     ></iframe>
   );
 };
