@@ -1,5 +1,6 @@
 import { Navigate, RouteObject, createHashRouter } from "react-router-dom";
 import Game from "src/pages/Game";
+import ImgBed from "src/pages/ImgBed";
 import Libary from "src/pages/Libary";
 import Music from "src/pages/Music";
 import Welcome from "src/pages/Welcome";
@@ -49,6 +50,13 @@ const routers: RouteObject[] = [
     element: <Game />,
     handle: {
       title: "游戏",
+    },
+  },
+  {
+    path: "imgbed",
+    element: <ImgBed />,
+    handle: {
+      title: "图床",
     },
   },
 ];

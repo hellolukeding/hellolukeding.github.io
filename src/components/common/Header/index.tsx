@@ -5,6 +5,7 @@ import {
   BxsMoviePlay,
   EmojioneV1StatueOfLiberty,
   FluentMusicNote2Play20Filled,
+  MdiBed,
   NotoV1VideoGame,
   OcticonTools,
   SystemUiconsDocumentStack,
@@ -59,6 +60,12 @@ const rightMenu = [
     icon: <OcticonTools />,
     navi: "#",
     key: "toolkit",
+  },
+  {
+    name: "图床",
+    icon: <MdiBed />,
+    navi: "/imgbed",
+    key: "imgbed",
   },
   {
     name: "电影",
