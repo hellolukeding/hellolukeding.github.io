@@ -1,4 +1,5 @@
 import { Navigate, RouteObject, createHashRouter } from "react-router-dom";
+import Blog from "src/pages/Blog";
 import Game from "src/pages/Game";
 import ImgBed from "src/pages/ImgBed";
 import Libary from "src/pages/Libary";
@@ -26,7 +27,7 @@ const routers: RouteObject[] = [
   },
   {
     path: "blog",
-    element: <div>blog</div>,
+    element: <Blog />,
     handle: {
       title: "博客",
     },

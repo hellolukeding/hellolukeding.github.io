@@ -2,7 +2,6 @@ import React from "react";
 import { crtRouter } from "src/router";
 import { classNames } from "src/utils/classNames";
 import {
-  BxsMoviePlay,
   EmojioneV1StatueOfLiberty,
   FluentMusicNote2Play20Filled,
   MdiBed,
@@ -52,7 +51,7 @@ const rightMenu = [
   {
     name: "博客",
     icon: <SystemUiconsDocumentStack />,
-    navi: "#",
+    navi: "/blog",
     key: "blog",
   },
   {
@@ -66,12 +65,6 @@ const rightMenu = [
     icon: <MdiBed />,
     navi: "/imgbed",
     key: "imgbed",
-  },
-  {
-    name: "电影",
-    icon: <BxsMoviePlay />,
-    navi: "#",
-    key: "movie",
   },
   {
     name: "音乐",
