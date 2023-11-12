@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ahooks": "^3.7.8",
+    "highlight.js": "^11.9.0",
     "react-router": "^6.17.0",
     "react-router-dom": "^6.17.0"
   },
@@ -40,16 +42,20 @@
     ]
   },
   "devDependencies": {
+    "@tanstack/react-query": "^5.8.2",
+    "@tanstack/react-query-devtools": "^5.8.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
+    "@types/markdown-it": "^13.0.6",
     "@types/node": "^16.18.24",
     "@types/react": "^18.0.38",
     "@types/react-dom": "^18.0.11",
     "commitizen": "^4.3.0",
     "cz-customizable": "^7.0.0",
     "gh-pages": "^6.0.0",
+    "markdown-it": "^13.0.2",
     "minimist": "^1.2.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -57,11 +63,7 @@
     "sass": "^1.69.4",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
-    "yaml": "^2.2.1",
-    "@tanstack/react-query": "^5.8.2",
-    "@tanstack/react-query-devtools": "^5.8.2",
-    "@types/markdown-it": "^13.0.6",
-    "markdown-it": "^13.0.2"
+    "yaml": "^2.2.1"
   },
   "config": {
     "commitizen": {

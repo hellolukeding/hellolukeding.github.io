@@ -5,5 +5,6 @@ declare interface Window {
       [key: string]: string[]
     },
     build_time: string
+    ENV: "dev" | "prod" | "test"
   }
 }

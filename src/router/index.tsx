@@ -1,5 +1,7 @@
 import { Navigate, RouteObject, createHashRouter } from "react-router-dom";
 import Blog from "src/pages/Blog";
+import BlogContainer from "src/pages/Blog/BlogContainer";
+import RenderMD from "src/pages/Blog/RenderMD";
 import Game from "src/pages/Game";
 import ImgBed from "src/pages/ImgBed";
 import Libary from "src/pages/Libary";
@@ -27,10 +29,30 @@ const routers: RouteObject[] = [
   },
   {
     path: "blog",
-    element: <Blog />,
+    element: <BlogContainer />,
     handle: {
       title: "博客",
     },
+    children: [
+      {
+        path: "",
+        element: <Navigate to="/blog/catalogue" replace={true} />,
+      },
+      {
+        path: "catalogue",
+        element: <Blog />,
+        handle: {
+          title: "目录",
+        },
+      },
+      {
+        path: "content/:yr/:md",
+        element: <RenderMD />,
+        handle: {
+          title: "内容",
+        },
+      },
+    ],
   },
   {
     path: "music",

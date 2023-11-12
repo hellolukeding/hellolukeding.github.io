@@ -1,1 +1,13 @@
 @import "src/style";
+
+.bc {
+  width: 60vw;
+  height: 100%;
+
+  @include flex(flex-start, center, column);
+
+  padding-top: vh(50);
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}

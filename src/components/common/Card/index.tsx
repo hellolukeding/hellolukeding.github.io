@@ -1,16 +1,24 @@
+import { useNavigate } from "react-router";
 import styles from "./index.module.scss";
 interface BlogCardProps {
   yr: string;
 }
 
 const BlogCard: React.FC<BlogCardProps> = (props) => {
+  const navigate = useNavigate();
   return (
     <article className={styles["BlogCard"]}>
       <h3 className={styles["neon"]}>{props.yr}</h3>
       <section className={styles["content"]}>
         {(window.config.blogs[props.yr] ?? []).map((item) => {
           return (
-            <div key={item} className={styles["blog"]}>
+            <div
+              key={item}
+              className={styles["blog"]}
+              onClick={() => {
+                navigate(`/blog/content/${props.yr}/${item}`);
+              }}
+            >
               {item}
             </div>
           );
