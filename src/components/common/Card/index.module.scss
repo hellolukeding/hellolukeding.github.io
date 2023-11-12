@@ -1,1 +1,54 @@
 @import "src/style";
+
+.BlogCard {
+  position: relative;
+  box-sizing: content-box;
+  border: 1px solid #ccc;
+  width: vw(600);
+  min-height: vh(400);
+
+  margin-bottom: vh(50);
+
+  &:hover {
+    border-width: 1px;
+    border-style: groove;
+    border-color: #FFCA3A;
+
+    .neon {
+      text-shadow: 0 0 10px #FFCA3A, 0 0 20px #FFCA3A, 0 0 50px #FFCA3A, 0 0 100px #FFCA3A, 0 0 200px #FFCA3A;
+    }
+  }
+}
+
+.neon {
+  color: #fff;
+  background-color: #050505;
+  position: absolute;
+  left: vw(20);
+  padding: 0 vw(20);
+  margin: 0;
+  transform: translateY(-50%);
+  transition: .2s;
+  cursor: pointer;
+  font-size: 32px;
+  font-family: 'Dancing Script', cursive;
+
+}
+
+.content {
+  padding: vh(30) vw(10);
+  padding-top: vh(10);
+}
+
+.blog {
+  font-size: 18px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: vh(10);
+  margin-top: vh(30);
+  cursor: pointer;
+
+  &:hover {
+    color: #FFCA3A;
+    border-color: #FFCA3A;
+  }
+}

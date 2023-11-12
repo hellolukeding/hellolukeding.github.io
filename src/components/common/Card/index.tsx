@@ -1,10 +1,23 @@
 import styles from "./index.module.scss";
-interface CardProps {
+interface BlogCardProps {
   yr: string;
 }
 
-const Card: React.FC<CardProps> = (props) => {
-  return <article className={styles["card"]}>{props.yr}</article>;
+const BlogCard: React.FC<BlogCardProps> = (props) => {
+  return (
+    <article className={styles["BlogCard"]}>
+      <h3 className={styles["neon"]}>{props.yr}</h3>
+      <section className={styles["content"]}>
+        {(window.config.blogs[props.yr] ?? []).map((item) => {
+          return (
+            <div key={item} className={styles["blog"]}>
+              {item}
+            </div>
+          );
+        })}
+      </section>
+    </article>
+  );
 };
 
-export default Card;
+export default BlogCard;
