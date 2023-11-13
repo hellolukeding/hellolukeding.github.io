@@ -6,8 +6,14 @@ interface BlogProps {}
 const Blog: React.FC<BlogProps> = (props) => {
   return (
     <article className={styles.blog}>
-      {Object.keys(window.config.blogs).map((item) => {
-        return <Card yr={item} key={item} />;
+      {Object.keys(window.config.blogs).map((item, index) => {
+        return (
+          <Card
+            yr={item}
+            key={item}
+            style={index === 0 ? { marginTop: 50 } : {}}
+          />
+        );
       })}
     </article>
   );
