@@ -1,8 +1,13 @@
 import hljs from "highlight.js";
 import MarkdownIt from "markdown-it";
+// @ts-ignore
+import markdownitgithub from "markdown-it-github";
 class mdRender {
   private md = new MarkdownIt();
   constructor() {
+
+
+    this.md.use(markdownitgithub);
     this.md.set({
       html: true,        // 在源码中启用 HTML 标签
       xhtmlOut: true,        // 使用 '/' 来闭合单标签 （比如 <br />）。
@@ -27,8 +32,12 @@ class mdRender {
       highlight: function (str, lang) {
         if (lang && hljs.getLanguage(lang)) {
           try {
+            console.log(lang);
             return hljs.highlight(lang, str).value;
           } catch (__) {}
+        } else {
+          console.log('javascript')
+          return hljs.highlight('javascript', str).value;
         }
 
         return ''; // 使用额外的默认转义

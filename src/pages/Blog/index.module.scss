@@ -6,8 +6,5 @@
 
   @include flex(flex-start, center, column);
 
-  padding-top: vh(50);
-
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
 }

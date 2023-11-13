@@ -5299,6 +5299,16 @@ gh-pages@^6.0.0:
     fs-extra "^11.1.1"
     globby "^6.1.0"
 
+github-markdown-css@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.npmmirror.com/github-markdown-css/-/github-markdown-css-5.4.0.tgz#4ef2093852d4fa977a2edbeaf752475c858de7d1"
+  integrity sha512-eJhoFp9fiZ290h0vWrU5MmW0A2eeB81Lv/3ZkdtKrylJvtWi71ezGrxCcw1P2fVr82s3NvBX66SoDCN1pWLadw==
+
+github-slugger@^1.2.1:
+  version "1.5.0"
+  resolved "https://registry.npmmirror.com/github-slugger/-/github-slugger-1.5.0.tgz#17891bbc73232051474d68bd867a34625c955f7d"
+  integrity sha512-wIh+gKBI9Nshz2o46B0B3f5k/W+WI9ZAv6y5Dn5WJ5SK1t0TnDimB4WE5rmTD05ZAIn8HALCZVmCsvj0w0v0lw==
+
 glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
   resolved "https://registry.npmmirror.com/glob-parent/-/glob-parent-5.1.2.tgz#869832c58034fe68a4093c17dc15e8340d8401c4"
@@ -7100,6 +7110,19 @@ makeerror@1.0.12:
   integrity sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==
   dependencies:
     tmpl "1.0.5"
+
+markdown-it-github@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npmmirror.com/markdown-it-github/-/markdown-it-github-0.5.0.tgz#4fbfd5736cc65706148f42890bdd340eb8eda466"
+  integrity sha512-ycHCFnPLSP9dlkcX/3yFzLhO9ZwHHYPIeqhFN9P7vnqWSpL56lbYganMbBU8u5H7b91qk6affHyYb2pMPbnMAQ==
+  dependencies:
+    github-slugger "^1.2.1"
+    markdown-it-theme "^0.2.0"
+
+markdown-it-theme@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npmmirror.com/markdown-it-theme/-/markdown-it-theme-0.2.0.tgz#9b06cb1cdace7d9d96f10a04a5d18813ae58ab2d"
+  integrity sha512-3R9tXmfP/7ilkRsm6o82GRdEMm5jJ8/s5OgdFB2wZC8VK5fJJLL0hxHGhu38wg+nBX7COBrvRN/QmrT3xybj/g==
 
 markdown-it@^13.0.2:
   version "13.0.2"

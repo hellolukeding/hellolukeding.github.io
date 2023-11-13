@@ -1,0 +1,10 @@
+@import "src/style";
+
+.mdrender {
+  width: vw(1000);
+  height: 100%;
+  border: 0;
+  padding: vh(50) vw(50);
+  overflow-y: auto;
+  @include commonScrollBar;
+}

@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
+import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import mdRender from "src/service/mdRender";
-import styles from "./index.module.scss";
+import "./index.scss";
 interface RenderMDProps {}
 
 const RenderMD: React.FC<RenderMDProps> = (props) => {
+  const aref = useRef<HTMLIFrameElement>(null);
   const { yr, md } = useParams();
   const { data: mddata } = useQuery({
     queryKey: ["blog", yr, md],
@@ -14,12 +16,23 @@ const RenderMD: React.FC<RenderMDProps> = (props) => {
       return text;
     },
   });
+
+  useEffect(() => {
+    if (aref.current) {
+      aref.current.innerHTML = new mdRender().render(mddata ?? "");
+    }
+  }, []);
+
   return (
-    <iframe
-      srcDoc={new mdRender().render(mddata ?? "")}
-      title={(yr ?? "") + (md ?? "")}
-      className={styles["mdrender"]}
-    ></iframe>
+    // <iframe
+    //   srcDoc={new mdRender().render(mddata ?? "")}
+    //   title={(yr ?? "") + (md ?? "")}
+    //   className={styles["mdrender"]}
+    //   ref={iref}
+    // ></iframe>
+    <>
+      <article ref={aref} className={"markdown-body mdrender"} />
+    </>
   );
 };
 

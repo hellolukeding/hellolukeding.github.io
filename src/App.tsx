@@ -1,7 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import "github-markdown-css/github-markdown-dark.css";
 import { RouterProvider } from "react-router";
 import Header from "./components/common/Header";
+import "./hljs.css";
 import styles from "./index.module.scss";
 import { crtRouter } from "./router";
 export const myQueryClient = new QueryClient();

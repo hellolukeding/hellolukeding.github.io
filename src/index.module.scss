@@ -11,6 +11,11 @@
   letter-spacing: 5px;
   @include flex(center, center, column);
   user-select: none;
+
+  .md-github {
+
+    @include commonScrollBar;
+  }
 }
 
 .content {
