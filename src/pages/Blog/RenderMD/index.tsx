@@ -21,7 +21,7 @@ const RenderMD: React.FC<RenderMDProps> = (props) => {
     if (aref.current) {
       aref.current.innerHTML = new mdRender().render(mddata ?? "");
     }
-  }, []);
+  }, [mddata]);
 
   return (
     // <iframe
