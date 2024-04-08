@@ -6,6 +6,7 @@ import Header from "./components/common/Header";
 import "./hljs.css";
 import styles from "./index.module.scss";
 import { crtRouter } from "./router";
+import "./style/index.scss";
 export const myQueryClient = new QueryClient();
 
 function App() {

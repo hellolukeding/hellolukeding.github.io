@@ -6,6 +6,7 @@ import Game from "src/pages/Game";
 import ImgBed from "src/pages/ImgBed";
 import Libary from "src/pages/Libary";
 import Music from "src/pages/Music";
+import ToolKit from "src/pages/ToolKit";
 import Welcome from "src/pages/Welcome";
 
 const routers: RouteObject[] = [
@@ -22,7 +23,7 @@ const routers: RouteObject[] = [
   },
   {
     path: "toolkit",
-    element: <div>toolkit</div>,
+    element: <ToolKit />,
     handle: {
       title: "工具集",
     },

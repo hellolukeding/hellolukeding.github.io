@@ -57,7 +57,7 @@ const rightMenu = [
   {
     name: "IT工具集",
     icon: <OcticonTools />,
-    navi: "#",
+    navi: "/toolkit",
     key: "toolkit",
   },
   {
