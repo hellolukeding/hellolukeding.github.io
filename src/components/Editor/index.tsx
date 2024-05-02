@@ -6,14 +6,25 @@ import styles from "./index.module.scss";
 interface EditorProps {
   className?: string;
   onChange?: (val?: string) => void;
+  onMounted?: (code: string) => void;
 }
 
 const Editor: React.FC<EditorProps> = (props) => {
-  const code = `
-  const logStr=(str:string)=>{
-    console.log(str);
-  };
-  logStr("hello world");
+  const code = `import { useEffect, useState } from "react";
+
+  function App() {
+    const [num, setNum] = useState(() => {
+      const num1 = 1 + 2;
+      const num2 = 2 + 3;
+      return num1 + num2
+    });
+  
+    return (
+      <div onClick={() => setNum((prevNum) => prevNum + 1)}>{num}</div>
+    );
+  }
+  
+  export default App;
   `;
 
   const handleEditorMount: OnMount = (editor, monaco) => {
@@ -33,6 +44,7 @@ const Editor: React.FC<EditorProps> = (props) => {
     });
 
     ata(editor.getValue());
+    props?.onMounted && props.onMounted(editor.getValue());
   };
 
   return (

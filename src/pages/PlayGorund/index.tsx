@@ -1,9 +1,13 @@
+import { useState } from "react";
 import Editor from "src/components/Editor";
+import Previewer from "src/components/Previewer";
 import styles from "./index.module.scss";
 interface PlayGroundProps {}
 const PlayGround: React.FC<PlayGroundProps> = (props) => {
+  const [code, setCode] = useState<string>("");
+
   const handleCodeChange = (code: string) => {
-    console.log(code);
+    setCode(code);
   };
 
   return (
@@ -14,9 +18,14 @@ const PlayGround: React.FC<PlayGroundProps> = (props) => {
           onChange={(val) => {
             val && handleCodeChange(val);
           }}
+          onMounted={(code) => {
+            setCode(code);
+          }}
         />
       </article>
-      <article className={styles["preview-panel"]}></article>
+      <article className={styles["preview-panel"]}>
+        <Previewer code={code} />
+      </article>
     </section>
   );
 };
