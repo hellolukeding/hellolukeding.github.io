@@ -4,8 +4,8 @@ import BlogContainer from "src/pages/Blog/BlogContainer";
 import RenderMD from "src/pages/Blog/RenderMD";
 import Game from "src/pages/Game";
 import ImgBed from "src/pages/ImgBed";
-import Libary from "src/pages/Libary";
 import Music from "src/pages/Music";
+import PlayGround from "src/pages/PlayGorund";
 import ToolKit from "src/pages/ToolKit";
 import Welcome from "src/pages/Welcome";
 
@@ -62,11 +62,18 @@ const routers: RouteObject[] = [
       title: "音乐",
     },
   },
+  // {
+  //   path: "libary",
+  //   element: <Libary />,
+  //   handle: {
+  //     title: "云旅游",
+  //   },
+  // },
   {
-    path: "libary",
-    element: <Libary />,
+    path: "playground",
+    element: <PlayGround />,
     handle: {
-      title: "云旅游",
+      title: "竞技场",
     },
   },
   {

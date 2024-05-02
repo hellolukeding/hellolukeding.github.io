@@ -1113,6 +1113,11 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@babel/standalone@^7.24.5":
+  version "7.24.5"
+  resolved "https://registry.npmmirror.com/@babel/standalone/-/standalone-7.24.5.tgz#2003c40665adf222c952b6d652607f30b3152c0d"
+  integrity sha512-Sl8oN9bGfRlNUA2jzfzoHEZxFBDliBlwi5mPVCAWKSlBNkXXJOHpu7SDOqjF6mRoTa6GNX/1kAWG3Tr+YQ3N7A==
+
 "@babel/template@^7.22.15", "@babel/template@^7.22.5", "@babel/template@^7.3.3":
   version "7.22.15"
   resolved "https://registry.npmmirror.com/@babel/template/-/template-7.22.15.tgz#09576efc3830f0430f4548ef971dde1350ef2f38"
@@ -1678,6 +1683,20 @@
   resolved "https://registry.npmmirror.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
+"@monaco-editor/loader@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npmmirror.com/@monaco-editor/loader/-/loader-1.4.0.tgz#f08227057331ec890fa1e903912a5b711a2ad558"
+  integrity sha512-00ioBig0x642hytVspPl7DbQyaSWRaolYie/UFNjoTdvoKPzo6xrXLhTk9ixgIKcLH5b5vDOjVNiGyY+uDCUlg==
+  dependencies:
+    state-local "^1.0.6"
+
+"@monaco-editor/react@^4.6.0":
+  version "4.6.0"
+  resolved "https://registry.npmmirror.com/@monaco-editor/react/-/react-4.6.0.tgz#bcc68671e358a21c3814566b865a54b191e24119"
+  integrity sha512-RFkU9/i7cN2bsq/iTkurMWOEErmYcY6JiQI3Jn+WeR/FGISH8JbHERjpS9oRuSOPvDMJI0Z8nJeKkbOs9sBYQw==
+  dependencies:
+    "@monaco-editor/loader" "^1.4.0"
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
   resolved "https://registry.npmmirror.com/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz#dbf733a965ca47b1973177dc0bb6c889edcfb129"
@@ -2020,12 +2039,30 @@
     "@types/babel__template" "*"
     "@types/babel__traverse" "*"
 
+"@types/babel__core@^7.1.0":
+  version "7.20.5"
+  resolved "https://registry.npmmirror.com/@types/babel__core/-/babel__core-7.20.5.tgz#3df15f27ba85319caa07ba08d0721889bb39c017"
+  integrity sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==
+  dependencies:
+    "@babel/parser" "^7.20.7"
+    "@babel/types" "^7.20.7"
+    "@types/babel__generator" "*"
+    "@types/babel__template" "*"
+    "@types/babel__traverse" "*"
+
 "@types/babel__generator@*":
   version "7.6.6"
   resolved "https://registry.npmmirror.com/@types/babel__generator/-/babel__generator-7.6.6.tgz#676f89f67dc8ddaae923f70ebc5f1fa800c031a8"
   integrity sha512-66BXMKb/sUWbMdBNdMvajU7i/44RkrA3z/Yt1c7R5xejt8qh84iU54yUWCtm0QwGJlDcf/gg4zd/x4mpLAlb/w==
   dependencies:
     "@babel/types" "^7.0.0"
+
+"@types/babel__standalone@^7.1.7":
+  version "7.1.7"
+  resolved "https://registry.npmmirror.com/@types/babel__standalone/-/babel__standalone-7.1.7.tgz#8ab09548a24f54015e7d84a55486148180bc4ace"
+  integrity sha512-4RUJX9nWrP/emaZDzxo/+RYW8zzLJTXWJyp2k78HufG459HCz754hhmSymt3VFOU6/Wy+IZqfPvToHfLuGOr7w==
+  dependencies:
+    "@types/babel__core" "^7.1.0"
 
 "@types/babel__template@*":
   version "7.4.3"
@@ -2469,6 +2506,11 @@
   dependencies:
     "@typescript-eslint/types" "5.62.0"
     eslint-visitor-keys "^3.3.0"
+
+"@typescript/ata@^0.9.4":
+  version "0.9.4"
+  resolved "https://registry.npmmirror.com/@typescript/ata/-/ata-0.9.4.tgz#64475566cce093a1ea171558de1b98cd01f67b0f"
+  integrity sha512-PaJ16WouPV/SaA+c0tnOKIqYq24+m93ipl/e0Dkxuianer+ibc5b0/6ZgfCFF8J7QEp57dySMSP9nWOFaCfJnw==
 
 "@webassemblyjs/ast@1.11.6", "@webassemblyjs/ast@^1.11.5":
   version "1.11.6"
@@ -9305,6 +9347,11 @@ stackframe@^1.3.4:
   version "1.3.4"
   resolved "https://registry.npmmirror.com/stackframe/-/stackframe-1.3.4.tgz#b881a004c8c149a5e8efef37d51b16e412943310"
   integrity sha512-oeVtt7eWQS+Na6F//S4kJ2K2VbRlS9D43mAlMyVpVWovy9o+jfgH8O9agzANzaiLjclA0oYzUXEM4PurhSUChw==
+
+state-local@^1.0.6:
+  version "1.0.7"
+  resolved "https://registry.npmmirror.com/state-local/-/state-local-1.0.7.tgz#da50211d07f05748d53009bee46307a37db386d5"
+  integrity sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==
 
 static-eval@2.0.2:
   version "2.0.2"

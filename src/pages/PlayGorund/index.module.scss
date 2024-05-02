@@ -1,0 +1,35 @@
+@import 'src/style';
+
+.base {
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+}
+
+.playground {
+  @extend .base;
+  @include flex(space-between, center);
+}
+
+.editor {
+  @extend .base;
+}
+
+.pabel-base {
+  width: 50%;
+  height: 100%;
+  background-color: #000
+}
+
+.left-editor {
+  @extend .pabel-base;
+  background-color: #1e1e1e;
+  padding: vh(20) vw(10);
+  box-sizing: border-box
+}
+
+.preview-panel {
+  @extend .pabel-base;
+  background-color: #1e1e1e;
+
+}

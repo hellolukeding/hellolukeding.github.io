@@ -2,8 +2,9 @@ import React from "react";
 import { crtRouter } from "src/router";
 import { classNames } from "src/utils/classNames";
 import {
-  EmojioneV1StatueOfLiberty,
+  CarbonDataBlob,
   FluentMusicNote2Play20Filled,
+  GameIconsThunderBlade,
   MdiBed,
   NotoV1VideoGame,
   OcticonTools,
@@ -29,11 +30,14 @@ const Header: React.FC = () => {
                 styles["item"],
                 item.key === active ? styles["active-item"] : ""
               )}
-              onClick={(e) => {
-                e.stopPropagation();
-                crtRouter.navigate(item.navi, { replace: true });
-                setActive(item.key);
-              }}
+              onClick={
+                item.handleClick ??
+                ((e) => {
+                  e.stopPropagation();
+                  crtRouter.navigate(item.navi, { replace: true });
+                  setActive(item.key);
+                })
+              }
             >
               {item.icon}
               <b>{item.name}</b>
@@ -47,7 +51,14 @@ const Header: React.FC = () => {
 
 export default Header;
 
-const rightMenu = [
+interface MenuItem {
+  name: string;
+  icon: JSX.Element;
+  navi: string;
+  key: string;
+  handleClick?: React.MouseEventHandler<HTMLSpanElement>;
+}
+const rightMenu: MenuItem[] = [
   {
     name: "博客",
     icon: <SystemUiconsDocumentStack />,
@@ -73,10 +84,20 @@ const rightMenu = [
     key: "music",
   },
   {
-    name: "云旅游",
-    icon: <EmojioneV1StatueOfLiberty />,
-    navi: "/libary",
-    key: "libary",
+    name: "竞技场",
+    icon: <GameIconsThunderBlade />,
+    navi: "/playground",
+    key: "playground",
+  },
+  {
+    name: "Carbon",
+    icon: <CarbonDataBlob />,
+    navi: "#",
+    key: "carbon",
+    handleClick: (e) => {
+      e.preventDefault();
+      window.open("https://carbon.now.sh/");
+    },
   },
   {
     name: "玩游戏",
