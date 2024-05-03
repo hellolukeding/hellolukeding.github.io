@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Editor from "src/components/Editor";
 import Previewer from "src/components/Previewer";
+import Trigger from "src/components/common/Trigger";
 import styles from "./index.module.scss";
 interface PlayGroundProps {}
 const PlayGround: React.FC<PlayGroundProps> = (props) => {
@@ -22,6 +23,8 @@ const PlayGround: React.FC<PlayGroundProps> = (props) => {
             setCode(code);
           }}
         />
+
+        <Trigger play={true} className={styles.trigger} />
       </article>
       <article className={styles["preview-panel"]}>
         <Previewer code={code} />

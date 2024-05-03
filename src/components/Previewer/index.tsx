@@ -46,6 +46,10 @@ const Previewer: React.FC<PreviewerProps> = (props) => {
       //根节点
       const rootDiv = previewRef.current.contentDocument!.createElement("div");
       rootDiv.setAttribute("id", "root");
+      rootDiv.setAttribute(
+        "style",
+        "display: flex;justify-content: center;align-items: center;width:100%;height:100%;background-color: #333;color: white;"
+      );
       rootDiv.innerHTML = ` 
       <div style="position:absolute;color:white;font-size: 20px;top: 0;left:0;width:100%;height:100%;display: flex;justify-content: center;align-items: center;">
       Loading...
@@ -70,7 +74,7 @@ const Previewer: React.FC<PreviewerProps> = (props) => {
       testScript.setAttribute("type", "module");
       testScript.innerHTML = `
       import React from 'react';
-      import ReactDOM from 'react-dom';
+      import ReactDOM from 'react-dom/client';
       console.log(React, ReactDOM)
       const App = () => {
         return React.createElement('div', null, 'Hello World');

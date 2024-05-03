@@ -1,0 +1,9 @@
+@import 'src/style';
+
+.wide {
+  width: vw(20);
+  height: vw(20);
+  background-color: #000;
+  color: #fff;
+  @include flex(center, center);
+}

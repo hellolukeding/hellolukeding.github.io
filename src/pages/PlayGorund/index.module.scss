@@ -25,7 +25,8 @@
   @extend .pabel-base;
   background-color: #1e1e1e;
   padding: vh(20) vw(10);
-  box-sizing: border-box
+  box-sizing: border-box;
+  position: relative
 }
 
 .preview-panel {
@@ -35,4 +36,18 @@
   overflow: hidden;
   box-sizing: border-box;
   border-left: 1px solid #3f3f3f;
+}
+
+.trigger {
+  position: absolute;
+  width: vw(50);
+  height: vw(50);
+  bottom: vw(20);
+  right: vw(50);
+  z-index: 100;
+  background: #0066CC;
+  border-radius: 100%;
+  @include flex(center, center);
+  cursor: pointer;
+  font-size: vw(20);
 }
