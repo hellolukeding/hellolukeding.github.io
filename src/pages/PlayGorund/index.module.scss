@@ -31,5 +31,8 @@
 .preview-panel {
   @extend .pabel-base;
   background-color: #1e1e1e;
-
+  padding: vh(20) vw(10);
+  overflow: hidden;
+  box-sizing: border-box;
+  border-left: 1px solid #3f3f3f;
 }
