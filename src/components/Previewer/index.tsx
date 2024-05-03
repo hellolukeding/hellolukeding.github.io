@@ -1,3 +1,4 @@
+import { transform } from "@babel/standalone";
 import { useEffect, useRef } from "react";
 import styles from "./index.module.scss";
 interface PreviewerProps {
@@ -7,39 +8,33 @@ interface PreviewerProps {
 const Previewer: React.FC<PreviewerProps> = (props) => {
   const previewRef = useRef<HTMLIFrameElement>(null);
 
-  // useEffect(() => {
-  //   const res = transform(props.code, {
-  //     presets: ["react", "typescript"],
-  //     filename: "luke.tsx",
-  //   });
-  //   console.log(res.code);
-  //   const url = URL.createObjectURL(
-  //     new Blob([res.code as string], { type: "text/javascript" })
-  //   );
-
-  //   if (previewRef.current) {
-  //     const window = previewRef.current.contentWindow!;
-  //     let cusScript: HTMLScriptElement | undefined;
-  //     if (window.document.getElementById("cusScript")) {
-  //       cusScript = window.document.getElementById(
-  //         "cusScript"
-  //       ) as HTMLScriptElement;
-  //     } else {
-  //       cusScript = window.document.createElement("script");
-  //       cusScript.type = "module";
-  //       cusScript.id = "cusScript";
-  //       window.document.body.appendChild(cusScript);
-  //     }
-  //     cusScript.src = url;
-  //   }
-  //   // const transformImportSourcePlugin: PluginObj = {
-  //   //   visitor: {
-  //   //     ImportDeclaration(path) {
-  //   //       path.node.source.value = url;
-  //   //     },
-  //   //   },
-  //   // };
-  // }, [props.code]);
+  useEffect(() => {
+    const res = transform(props.code, {
+      presets: ["react", "typescript"],
+      filename: "luke.tsx",
+    });
+    console.log(res.code);
+    const url = URL.createObjectURL(
+      new Blob([res.code as string], { type: "text/javascript" })
+    );
+    const previewWindow = previewRef.current!.contentWindow!;
+    const getContainer = new Promise<HTMLScriptElement>((resolve, reject) => {
+      const timer = setInterval(() => {
+        if (previewWindow.document.getElementById("cusScript")) {
+          clearInterval(timer);
+          resolve(
+            previewWindow.document.getElementById(
+              "cusScript"
+            )! as HTMLScriptElement
+          );
+        }
+      }, 10);
+    });
+    getContainer.then((container) => {
+      container.innerHTML = "";
+      container.src = url;
+    });
+  }, [props.code]);
 
   useEffect(() => {
     if (previewRef.current) {
@@ -72,12 +67,23 @@ const Previewer: React.FC<PreviewerProps> = (props) => {
       const testScript =
         previewRef.current.contentDocument?.createElement("script")!;
       testScript.setAttribute("type", "module");
+      testScript.setAttribute("id", "cusScript");
       testScript.innerHTML = `
       import React from 'react';
+      import { useState } from "react";
       import ReactDOM from 'react-dom/client';
       console.log(React, ReactDOM)
       const App = () => {
-        return React.createElement('div', null, 'Hello World');
+        const [num, setNum] = useState(() => {
+          const num1 = 1 + 2;
+          const num2 = 2 + 3;
+          return num1 + num2;
+        });
+        return React.createElement('div', {
+          onClick: () => {
+           setNum(prevNum => prevNum + 1)
+          }
+        },num);
       }
       ReactDOM.render(React.createElement(App), document.getElementById('root'));
 

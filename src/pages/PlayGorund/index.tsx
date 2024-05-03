@@ -6,6 +6,8 @@ import styles from "./index.module.scss";
 interface PlayGroundProps {}
 const PlayGround: React.FC<PlayGroundProps> = (props) => {
   const [code, setCode] = useState<string>("");
+  const [commitCode, setCommitCode] = useState<string>("");
+  const [trigger, setTrigger] = useState<boolean>(false);
 
   const handleCodeChange = (code: string) => {
     setCode(code);
@@ -18,16 +20,23 @@ const PlayGround: React.FC<PlayGroundProps> = (props) => {
           className={styles["editor"]}
           onChange={(val) => {
             val && handleCodeChange(val);
+            setTrigger(true);
           }}
           onMounted={(code) => {
             setCode(code);
           }}
         />
 
-        <Trigger play={true} className={styles.trigger} />
+        <Trigger
+          play={trigger}
+          className={styles.trigger}
+          onClick={() => {
+            setCommitCode(code);
+          }}
+        />
       </article>
       <article className={styles["preview-panel"]}>
-        <Previewer code={code} />
+        <Previewer code={commitCode} />
       </article>
     </section>
   );
