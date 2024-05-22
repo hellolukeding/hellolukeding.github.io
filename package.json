@@ -81,5 +81,8 @@
       "config": ".cz.config.js"
     }
   },
-  "homepage": "https://hellolukeding.github.io"
+  "homepage": "https://hellolukeding.github.io",
+  "volta": {
+    "node": "18.20.3"
+  }
 }

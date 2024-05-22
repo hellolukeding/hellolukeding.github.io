@@ -6,13 +6,18 @@ module.exports = () => {
   try {
     const folds = fs.readdirSync(directoryPath);
     const obj = {};
-    folds.forEach(item => {
+    folds.forEach((item) => {
       const filePath = path.join(directoryPath, item);
-      const files = fs.readdirSync(filePath).filter(itm => itm.includes(".md")).map(file => file.replace(".md", ""));
-      obj[item] = files;
-    })
+      if (fs.statSync(filePath).isDirectory()) {
+        const files = fs
+          .readdirSync(filePath)
+          .filter((itm) => itm.includes(".md"))
+          .map((file) => file.replace(".md", ""));
+        obj[item] = files;
+      }
+    });
     return obj;
-  } catch(error) {
+  } catch (error) {
     throw new Error(error);
   }
-}
+};
