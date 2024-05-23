@@ -10,6 +10,16 @@ import "./style/index.scss";
 export const myQueryClient = new QueryClient();
 
 function App() {
+  console.log(
+    "白屏时间",
+    window.performance.timing.domLoading -
+      window.performance.timing.navigationStart
+  );
+  console.log(
+    "首屏时间",
+    window.performance.timing.domInteractive -
+      window.performance.timing.navigationStart
+  );
   return (
     <div className={styles.app}>
       <QueryClientProvider client={myQueryClient}>
