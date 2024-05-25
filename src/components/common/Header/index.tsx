@@ -9,16 +9,12 @@ const Header: React.FC = () => {
   const [active, setActive] = React.useState<string>(
     window.location.hash.slice(2)
   );
+  const [hoverActive, setHoverActive] = React.useState<string>("");
   const spanRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const hoverHandler = (e: MouseEvent) => {
-      const dataset = (e.target as HTMLElement).dataset;
-      console.log(dataset);
-    };
-    spanRef.current?.addEventListener("mousemove", hoverHandler);
+    setActive(window.location.hash.split("/").slice(1)[0]);
   }, []);
-
   return (
     <header className={styles.header}>
       <span className={styles.logo}>lukeding</span>
@@ -36,22 +32,33 @@ const Header: React.FC = () => {
               onClick={
                 item.handleClick ??
                 ((e) => {
+                  if (item.father) return;
                   e.stopPropagation();
                   crtRouter.navigate(item.navi, { replace: true });
                   setActive(item.key);
                 })
               }
+              onPointerEnter={() => {
+                setHoverActive(item.key);
+              }}
             >
               {item.icon}
               <b>{item.name}</b>
-              {item.father && (
+              {hoverActive === item.key && item.father && (
                 <section className={styles["subnode-container"]}>
                   {key2NodeMP.get(item.key)?.map((subnode) => {
                     return (
                       <nav
                         key={item.key + subnode.key}
                         className={styles["subnode-item"]}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          crtRouter.navigate(subnode.navi, { replace: true });
+                          setActive(item.key);
+                          setHoverActive("");
+                        }}
                       >
+                        {subnode.icon}
                         {subnode.name}
                       </nav>
                     );

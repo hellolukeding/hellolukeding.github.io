@@ -4,6 +4,7 @@ import BlogContainer from "src/pages/Blog/BlogContainer";
 import RenderMD from "src/pages/Blog/RenderMD";
 import Game from "src/pages/Game";
 import ImgBed from "src/pages/ImgBed";
+import Interview from "src/pages/Interview";
 import Music from "src/pages/Music";
 import PlayGround from "src/pages/PlayGorund";
 import ToolKit from "src/pages/ToolKit";
@@ -26,6 +27,20 @@ const routers: RouteObject[] = [
     element: <ToolKit />,
     handle: {
       title: "工具集",
+    },
+  },
+  {
+    path: "toolkit/workflow",
+    element: <ToolKit />,
+    handle: {
+      title: "工作流",
+    },
+  },
+  {
+    path: "toolkit/mindmap",
+    element: <ToolKit />,
+    handle: {
+      title: "思维导图",
     },
   },
   {
@@ -88,6 +103,13 @@ const routers: RouteObject[] = [
     element: <ImgBed />,
     handle: {
       title: "图床",
+    },
+  },
+  {
+    path: "interview",
+    element: <Interview />,
+    handle: {
+      title: "面试题",
     },
   },
 ];

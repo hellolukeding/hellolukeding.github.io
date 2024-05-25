@@ -2,9 +2,12 @@ import {
   CarbonDataBlob,
   FluentMusicNote2Play20Filled,
   GameIconsThunderBlade,
+  MaterialSymbolsMapOutlineSharp,
   MdiBed,
   NotoV1VideoGame,
   OcticonTools,
+  PhFlowArrowDuotone,
+  SolarMaskHapplyBroken,
   SystemUiconsDocumentStack,
 } from "./icons";
 export interface MenuItem {
@@ -59,6 +62,12 @@ export const rightMenu: MenuItem[] = [
     },
   },
   {
+    name: "面试题",
+    icon: <SolarMaskHapplyBroken />,
+    navi: "/interview",
+    key: "interview",
+  },
+  {
     name: "玩游戏",
     icon: <NotoV1VideoGame />,
     navi: "/game",
@@ -73,13 +82,13 @@ export const key2NodeMP: Map<string, MenuItem[]> = new Map([
     [
       {
         name: "工作流",
-        icon: <OcticonTools />,
+        icon: <PhFlowArrowDuotone />,
         navi: "/toolkit/workflow",
         key: "workflow",
       },
       {
         name: "思维导图",
-        icon: <OcticonTools />,
+        icon: <MaterialSymbolsMapOutlineSharp />,
         navi: "/toolkit/mindmap",
         key: "mindmap",
       },

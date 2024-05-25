@@ -50,6 +50,9 @@
   background-color: #000;
   top: calc(100% + 10px);
   border-bottom: 2px solid #ffca3ab0;
+
+  animation: scrollIn 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  animation-fill-mode: forwards;
 }
 
 .subnode-item {
@@ -63,6 +66,7 @@
   &:hover {
     background-color: #ffca3ab0;
   }
+
 
 }
 
@@ -81,7 +85,7 @@
   }
 
   100% {
-    color: #FFCA3A;
+    color: #ffca3abf;
   }
 }
 
@@ -97,5 +101,17 @@
 
   100% {
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes scrollIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
