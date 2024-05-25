@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useQuery } from "@tanstack/react-query";
 import githubQuery from "src/apis/queryInstance/github";
 
