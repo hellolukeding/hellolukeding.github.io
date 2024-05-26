@@ -1,15 +1,18 @@
+import { useEffect, useRef } from "react";
 import styles from "./index.module.scss";
+import { runShader } from "./runShader";
 interface WelcomeProps {}
 const Welcome: React.FC<WelcomeProps> = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const str = `Welcome to visit my blog!`;
+  useEffect(() => {
+    runShader(canvasRef);
+  }, []);
   return (
     <>
-      <section className={styles.wel}>
-        <img
-          src="https://cdn.ipfsscan.io/ipfs/Qmeu9wSYJRYF4FTa6En5zznCBPz6dZaYEq3vjCX7qiBgVY?filename=image.png"
-          alt=""
-        />
-        <p>welcome to my blog🤞!</p>
-      </section>
+      <canvas className={styles.wel} ref={canvasRef}></canvas>
+
+      <p className={styles["slogan"]}>{str}</p>
     </>
   );
 };
