@@ -7,7 +7,13 @@ import "./hljs.css";
 import styles from "./index.module.scss";
 import { crtRouter } from "./router";
 import "./style/index.scss";
-export const myQueryClient = new QueryClient();
+export const myQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   console.log(

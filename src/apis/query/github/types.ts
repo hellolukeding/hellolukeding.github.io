@@ -10,3 +10,12 @@ export interface useGithubIssueLabelsResults {
     url: string;
   }[];
 }
+
+export interface useGithubIssueByLabelResult {
+  data: {
+    labels: useGithubIssueLabelsResults[];
+    title: string;
+    id: number;
+    body: string;
+  }[];
+}

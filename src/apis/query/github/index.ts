@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import githubQuery from "src/apis/queryInstance/github";
-import { useGithubIssueLabelsResults } from "./types";
+import {
+  useGithubIssueByLabelResult,
+  useGithubIssueLabelsResults,
+} from "./types";
 
 // 获取issue列表
 export const useGithubIssue = () => {
@@ -21,6 +24,24 @@ export const useGithubIssueLabels = () => {
   });
   const queryObj = useQuery({
     queryKey: ["/repos/hellolukeding/hellolukeding.github.io/labels"],
+    queryFn: () => Promise.resolve(query),
+  });
+  return { ...queryObj, cancle };
+};
+
+//获取根据label获取issue
+export const useGithubIssueByLabel = (...labels: string[]) => {
+  const [query, cancle] = githubQuery.get<useGithubIssueByLabelResult>({
+    url: "/repos/hellolukeding/hellolukeding.github.io/issues",
+    query: {
+      labels: labels.join(","),
+    },
+  });
+  const queryObj = useQuery({
+    queryKey: [
+      "/repos/hellolukeding/hellolukeding.github.io/issues",
+      ...labels,
+    ],
     queryFn: () => Promise.resolve(query),
   });
   return { ...queryObj, cancle };

@@ -1,0 +1,22 @@
+@import 'src/style';
+
+.main {
+  width: 100%;
+  height: auto;
+  margin: vh(15) 0;
+}
+
+.title {
+  width: 100%;
+  height: auto;
+  margin: vh(15) 0;
+  line-height: vh(25);
+  box-sizing: content-box;
+  padding: 0 vw(10);
+  box-sizing: border-box;
+  cursor: pointer;
+
+  &:hover {
+    border-bottom: 1px solid #fff;
+  }
+}

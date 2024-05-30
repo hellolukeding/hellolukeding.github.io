@@ -1,0 +1,30 @@
+@import 'src/style';
+
+.main {
+  box-sizing: border-box;
+  width: 100%;
+  padding: vh(0) vw(20);
+  @include flex(center, center, column);
+  font-size: 1rem;
+}
+
+.name {
+  width: 100%;
+  @include flex(space-between, center);
+  cursor: pointer;
+}
+
+.icon-default {
+  font-size: 1.5rem;
+}
+
+.icon-active {
+  @extend .icon-default;
+  transform: rotate(-90deg);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.label-active {
+  color: #fff;
+
+}
