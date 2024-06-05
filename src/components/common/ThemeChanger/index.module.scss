@@ -1,0 +1,12 @@
+@import 'src/style';
+
+.main {
+  position: fixed;
+
+  bottom: vh(10);
+  left: vw(10);
+
+  &:hover {
+    cursor: pointer;
+  }
+}

@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "github-markdown-css/github-markdown-dark.css";
 import { RouterProvider } from "react-router";
 import Header from "./components/common/Header";
+import ThemeChanger from "./components/common/ThemeChanger";
 import "./hljs.css";
 import styles from "./index.module.scss";
 import { crtRouter } from "./router";
@@ -35,6 +36,7 @@ function App() {
           <RouterProvider router={crtRouter} />
         </article>
       </QueryClientProvider>
+      <ThemeChanger />
     </div>
   );
 }

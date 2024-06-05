@@ -17,7 +17,15 @@ const Header: React.FC = () => {
   }, []);
   return (
     <header className={styles.header}>
-      <span className={styles.logo}>lukeding</span>
+      <span
+        className={styles.logo}
+        onClick={(e) => {
+          e.stopPropagation();
+          crtRouter.navigate("/welcome");
+        }}
+      >
+        lukeding
+      </span>
 
       <span className={styles.icon} ref={spanRef}>
         {rightMenu.map((item) => {

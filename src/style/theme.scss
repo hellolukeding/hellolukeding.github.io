@@ -1,0 +1,34 @@
+$theme-main: "dark";
+$theme-dark: (
+  background-color: #000,
+  color: #fff,
+  // active-color: #ffca3a,
+);
+
+$theme-light: (
+  background-color: #fff,
+  color: #000,
+  // active-color: #ffca3a,
+);
+
+@mixin themed($theme) {
+  @if $theme =='dark' {
+    @each $key, $value in $theme-dark {
+      #{$key}: #{$value};
+    }
+  }
+
+  @if $theme =='light' {
+    @each $key, $value in $theme-light {
+      #{$key}: #{$value};
+    }
+  }
+}
+
+.dark {
+  @include themed("dark");
+}
+
+.light {
+  @include themed("light");
+}

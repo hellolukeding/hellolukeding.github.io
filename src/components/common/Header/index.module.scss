@@ -17,7 +17,6 @@
   font-size: 18px;
   @include flex(flex-start, center);
 
-
 }
 
 .item {
@@ -73,6 +72,10 @@
 
 .logo {
   font-family: 'Dancing Script', cursive;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 /*--------------------------------------- annimation ------------------------------------------*/
