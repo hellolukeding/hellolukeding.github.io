@@ -24,11 +24,3 @@ $theme-light: (
     }
   }
 }
-
-.dark {
-  @include themed("dark");
-}
-
-.light {
-  @include themed("light");
-}

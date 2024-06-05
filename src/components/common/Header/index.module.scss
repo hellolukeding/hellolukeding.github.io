@@ -10,9 +10,16 @@
   padding: vh(20) vw(40);
   box-sizing: border-box;
   @include flex(space-between, center);
+  @include themed('dark');
 
-
+  @include media('xlarge') {
+    //磨砂效果
+    backdrop-filter: blur(10px);
+    background-color: #00000033;
+  }
 }
+
+
 
 .icon {
   width: auto;
@@ -37,6 +44,10 @@
 
   svg {
     margin-right: vw(10);
+  }
+
+  @include media("xlarge") {
+    display: none;
   }
 }
 
@@ -80,6 +91,43 @@
   }
 }
 
+.collapse {
+  cursor: pointer;
+}
+
+
+.hidden-menu {
+  position: fixed;
+  height: 100vh;
+  width: 20rem;
+  background-color: #000;
+  top: vh(70);
+  right: 0;
+  animation: movein 0.3s ease-in;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.navi-menu {
+  li {
+    cursor: pointer;
+    list-style-type: none;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    @include flex(flex-start, center);
+
+    svg {
+      margin-right: 1rem;
+    }
+  }
+}
+
+.navi-menu-subnode {
+  position: relative;
+  left: 2rem;
+}
+
 /*--------------------------------------- annimation ------------------------------------------*/
 @keyframes colorful {
   0% {
@@ -119,5 +167,17 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes movein {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }

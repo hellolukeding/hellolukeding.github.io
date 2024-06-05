@@ -11,8 +11,21 @@
 .slogan {
   position: fixed;
   font-family: 'Dancing Script', cursive;
-  font-size: vw(50);
+  font-size: 3rem;
+  letter-spacing: 1rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  @include media('medium') {
+    font-size: 2rem;
+  }
+
+  @include media('large') {
+    font-size: 3rem;
+  }
+
+  @include media('xlarge') {
+    font-size: 4rem;
+  }
 }

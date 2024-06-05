@@ -3,8 +3,11 @@
 .bc {
   width: 60vw;
   height: 100%;
+  overflow: auto;
 
   @include flex(flex-start, center, column);
 
-  overflow: auto;
+  @include media('xlarge') {
+    width: 100%;
+  }
 }

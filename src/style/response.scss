@@ -1,0 +1,19 @@
+// _variables.scss
+
+$breakpoints: (
+  'medium': 768px,
+  'large': 1024px,
+  'xlarge': 1070px,
+);
+
+// _mixins.scss
+
+@mixin media($size) {
+  $query: map-get($breakpoints, $size);
+
+  @if $query {
+    @media (max-width: $query) {
+      @content;
+    }
+  }
+}

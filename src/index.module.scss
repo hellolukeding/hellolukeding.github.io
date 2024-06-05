@@ -1,5 +1,10 @@
 @import "src/style";
 
+
+body {
+  @include themed('dark');
+}
+
 .app {
   width: 100vw;
   height: 100vh;
@@ -11,11 +16,12 @@
   letter-spacing: 5px;
   @include flex(center, center, column);
   user-select: none;
+  overflow: hidden;
 
   .md-github {
-
     @include commonScrollBar;
   }
+
 }
 
 .content {

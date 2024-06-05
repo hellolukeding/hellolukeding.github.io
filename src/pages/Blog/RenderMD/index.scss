@@ -7,4 +7,10 @@
   padding: vh(50) vw(50);
   overflow-y: auto;
   @include commonScrollBar;
+
+  @include media('xlarge') {
+    width: 100%;
+    padding: vh(10) vw(20);
+    box-sizing: border-box;
+  }
 }
