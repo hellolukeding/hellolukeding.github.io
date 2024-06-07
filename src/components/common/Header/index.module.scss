@@ -54,7 +54,7 @@
 .active-item {
   border-bottom: 2px solid #FFCA3A;
   color: #FFCA3A;
-
+  @include flex(flex-start, center);
 }
 
 .subnode-container {

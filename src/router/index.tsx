@@ -3,6 +3,7 @@ import Blog from "src/pages/Blog";
 import BlogContainer from "src/pages/Blog/BlogContainer";
 import RenderMD from "src/pages/Blog/RenderMD";
 import Game from "src/pages/Game";
+import GltfViewer from "src/pages/GltfViewer";
 import ImgBed from "src/pages/ImgBed";
 import Interview from "src/pages/Interview";
 import Music from "src/pages/Music";
@@ -34,6 +35,13 @@ const routers: RouteObject[] = [
     element: <ToolKit />,
     handle: {
       title: "工作流",
+    },
+  },
+  {
+    path: "toolkit/gltfviewer",
+    element: <GltfViewer />,
+    handle: {
+      title: "GltfViewer",
     },
   },
   {
