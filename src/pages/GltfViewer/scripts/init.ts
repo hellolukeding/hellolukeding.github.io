@@ -3,54 +3,83 @@ export const init = (container: HTMLDivElement | null) => {
   if (!container) return;
   const width = container.clientWidth;
   const height = container.clientHeight;
+  const renderer = initRenderer(container);
+  const scene = initScene();
+  const camera = initCamera();
+  const light = initLight();
+  scene.add(light);
+  const geometry = new THREE.BoxGeometry(20, 20, 20);
 
-  const scene = new THREE.Scene();
-
-  //创建一个长方体几何对象Geometry，根据容器的大小按比例设置长宽高
-  const geometry = new THREE.BoxGeometry(width / 30, width / 30, width / 30);
-
-  //创建一个材质对象Material
-  const material = new THREE.MeshBasicMaterial({
-    color: "#008B8B",
-    opacity: 0.7,
-    transparent: true,
-  });
-
-  // 两个参数分别为几何体geometry、材质material
-  const mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
-  //设置网格模型在三维空间中的位置坐标，默认是坐标原点
-  mesh.position.set(0, 0, 0);
-  //网格模型添加到场景中
+  const materials = [
+    new THREE.MeshBasicMaterial({ color: 0x00ff00 }),
+    new THREE.MeshBasicMaterial({ color: 0x0000ff }),
+    new THREE.MeshBasicMaterial({ color: 0xff0000 }),
+    new THREE.MeshBasicMaterial({ color: 0xffff00 }),
+    new THREE.MeshBasicMaterial({ color: 0xff00ff }),
+    new THREE.MeshBasicMaterial({ color: 0x00ffff }),
+  ];
+  const mesh = new THREE.Mesh(geometry, materials);
   scene.add(mesh);
 
-  //创建相机对象
-  // 实例化一个透视投影相机对象
-  const camera = new THREE.PerspectiveCamera();
-  //设置相机的位置坐标
-  camera.position.set(200, 200, 200);
-  camera.lookAt(mesh.position); //指向mesh对应的位置
+  // Create an edges geometry from the cube geometry
+  const edges = new THREE.EdgesGeometry(mesh.geometry);
 
-  //创建渲染器对象
-  const renderer = new THREE.WebGLRenderer();
-  //设置渲染器的颜色和大小
-  renderer.setClearColor("#000000");
-  renderer.setSize(width, height);
-  //相机绕y轴旋转
-  let step = 0;
-  //渲染函数
-  function render() {
-    //网格模型旋转
-    mesh.rotateY(0.01);
-    //渲染器执行渲染操作
+  // Create a line segments object with the edges geometry and a basic material
+  const line = new THREE.LineSegments(
+    edges,
+    new THREE.LineBasicMaterial({ color: 0xffffff }) // Set the color of the lines
+  );
+
+  mesh.add(line);
+
+  renderer.render(scene, camera);
+  const animate = () => {
+    requestAnimationFrame(animate);
+    mesh.rotation.x += 0.01;
+    mesh.rotation.y += 0.02;
     renderer.render(scene, camera);
-    requestAnimationFrame(render);
-  }
-  render();
-  // 相机看向的位置
-  camera.lookAt(0, 0, 0);
+  };
+  animate();
 
-  //
-  renderer.render(scene, camera); //执行渲染操作
-  //渲染器渲染场景
+  window.addEventListener("resize", () => {
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  });
+};
+
+/*--------------------------------------- renderer ------------------------------------------*/
+export const initRenderer = (
+  container: HTMLDivElement
+): THREE.WebGLRenderer => {
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
+  return renderer;
+};
+
+/*--------------------------------------- scene ------------------------------------------*/
+
+export const initScene = (): THREE.Scene => {
+  return new THREE.Scene();
+};
+
+/*--------------------------------------- camera ------------------------------------------*/
+export const initCamera = () => {
+  const camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    1,
+    1000
+  );
+  camera.position.set(0, 0, 100);
+  camera.lookAt(0, 0, 0);
+  return camera;
+};
+
+/*--------------------------------------- light ------------------------------------------*/
+export const initLight = () => {
+  const light = new THREE.DirectionalLight(0xffffff, 3);
+  light.position.set(0, 0, 1);
+  return light;
 };
