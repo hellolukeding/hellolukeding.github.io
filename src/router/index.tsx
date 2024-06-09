@@ -3,9 +3,9 @@ import Blog from "src/pages/Blog";
 import BlogContainer from "src/pages/Blog/BlogContainer";
 import RenderMD from "src/pages/Blog/RenderMD";
 import Game from "src/pages/Game";
-import GltfViewer from "src/pages/GltfViewer";
 import ImgBed from "src/pages/ImgBed";
 import Interview from "src/pages/Interview";
+import Lab3d from "src/pages/Lab3d";
 import Music from "src/pages/Music";
 import PlayGround from "src/pages/PlayGorund";
 import ToolKit from "src/pages/ToolKit";
@@ -38,10 +38,10 @@ const routers: RouteObject[] = [
     },
   },
   {
-    path: "toolkit/gltfviewer",
-    element: <GltfViewer />,
+    path: "toolkit/3dlab",
+    element: <Lab3d />,
     handle: {
-      title: "GltfViewer",
+      title: "3dlab",
     },
   },
   {

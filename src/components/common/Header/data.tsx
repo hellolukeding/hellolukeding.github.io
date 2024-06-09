@@ -94,10 +94,10 @@ export const key2NodeMP: Map<string, MenuItem[]> = new Map([
         key: "mindmap",
       },
       {
-        name: "3D查看器",
+        name: "3D实验室",
         icon: <MaterialSymbols3dRotation />,
-        navi: "/toolkit/gltfviewer",
-        key: "gltfviewer",
+        navi: "/toolkit/3dlab",
+        key: "3dlab",
       },
     ],
   ],

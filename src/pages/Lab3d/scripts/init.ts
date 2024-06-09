@@ -199,3 +199,10 @@ export const initMouseWheel = (camera: THREE.PerspectiveCamera) => {
     camera.position.z += e.deltaY * 0.1;
   });
 };
+
+/*---------------------------------------   ------------------------------------------*/
+export const destroy = () => {
+  window.removeEventListener("resize", () => {});
+  window.removeEventListener("mousewheel", () => {});
+  window.cancelAnimationFrame(0);
+};
