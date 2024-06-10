@@ -9,16 +9,26 @@ export const commonInit = (container: HTMLDivElement | null) => {
   const camera = CameraInit(container);
   HelperInit(scene);
   controllerInit(scene, camera, renderer);
+  const render = globalRender(scene, camera, renderer);
   initMouseWheel(camera);
   // LightInit(scene);
-  const spotLight = SpotLightInit(scene);
+  const cube = initMesh(scene);
+  const spotLight = initSpotLight(scene, cube);
   spotLightHelperInit(scene, spotLight);
-  initMesh(scene);
   listenResize(container, camera, renderer);
-  GuiInit(spotLight);
+  GuiInit(spotLight, render);
   renderer.render(scene, camera);
 };
 
+const globalRender = (
+  scene: THREE.Scene,
+  camera: THREE.PerspectiveCamera,
+  renderer: THREE.WebGLRenderer
+) => {
+  return () => {
+    renderer.render(scene, camera);
+  };
+};
 /*--------------------------------------- renderer ------------------------------------------*/
 
 const RendererInit = (container: HTMLDivElement) => {
@@ -26,6 +36,7 @@ const RendererInit = (container: HTMLDivElement) => {
     antialias: true, //抗锯齿
     alpha: true, //透明背景
   });
+  renderer.shadowMap.enabled = true;
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
@@ -35,7 +46,7 @@ const RendererInit = (container: HTMLDivElement) => {
 /*--------------------------------------- camera ------------------------------------------*/
 const CameraInit = (container: HTMLDivElement) => {
   const camera = new THREE.PerspectiveCamera(
-    45,
+    75,
     container.clientWidth / container.clientHeight,
     1,
     1000
@@ -59,8 +70,8 @@ const HelperInit = (scene: THREE.Scene) => {
   const axesHelper = new THREE.AxesHelper(100);
   scene.add(axesHelper);
   // 网格
-  const gridHelper = new THREE.GridHelper(200, 200);
-  scene.add(gridHelper);
+  // const gridHelper = new THREE.GridHelper(200, 200);
+  // scene.add(gridHelper);
 };
 
 const spotLightHelperInit = (
@@ -125,12 +136,14 @@ const LightInit = (scene: THREE.Scene) => {
   scene.add(light);
 };
 
-const SpotLightInit = (scene: THREE.Scene) => {
-  const spotLight = new THREE.SpotLight(0xffffff, 1, 100);
-  spotLight.position.set(50, 50, 35);
-  spotLight.target.position.set(0, 0, 0);
-  spotLight.angle = Math.PI / 6;
-  spotLight.penumbra = 0.1; //边缘模糊
+export const initSpotLight = (scene: THREE.Scene, target: THREE.Object3D) => {
+  const spotLight = new THREE.SpotLight(0x00ffff, 500);
+  spotLight.position.set(50, 50, 50);
+  spotLight.target = target;
+  spotLight.intensity = 1;
+  spotLight.distance = 100;
+  spotLight.angle = Math.PI / 4;
+  spotLight.penumbra = 0.1;
   scene.add(spotLight);
   return spotLight;
 };
@@ -138,7 +151,7 @@ const SpotLightInit = (scene: THREE.Scene) => {
 /*--------------------------------------- mesh ------------------------------------------*/
 export const initMesh = (scene: THREE.Scene) => {
   const geometry = new THREE.BoxGeometry(10, 10, 10);
-  const material = new THREE.MeshLambertMaterial({ color: 0x000000 });
+  const material = new THREE.MeshLambertMaterial({ color: 0x00f000 });
 
   const cube = new THREE.Mesh(geometry, material);
   const edges = new THREE.EdgesGeometry(geometry);
@@ -152,14 +165,14 @@ export const initMesh = (scene: THREE.Scene) => {
   scene.add(cube);
 
   // //plane
-  // const planeGeometry = new THREE.PlaneGeometry(100, 100);
-  // const planeMaterial = new THREE.MeshPhongMaterial({
-  //   color: 0x3f3f3f,
-  //   side: THREE.DoubleSide,
-  // });
-  // const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-  // plane.rotation.x = -Math.PI / 2;
-  // scene.add(plane);
+  const planeGeometry = new THREE.PlaneGeometry(100, 100);
+  const planeMaterial = new THREE.MeshLambertMaterial({ color: 0xfff });
+  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  plane.rotation.x = -Math.PI / 2;
+  plane.castShadow = true; // 接收阴影
+  plane.receiveShadow = true; // 产生阴影
+  scene.add(plane);
+  return cube;
 };
 
 /*--------------------------------------- resize ------------------------------------------*/
@@ -177,19 +190,25 @@ const listenResize = (
 };
 
 /*--------------------------------------- gui ------------------------------------------*/
-const GuiInit = (spotLight: THREE.SpotLight) => {
+const GuiInit = (spotLight: THREE.SpotLight, render: () => void) => {
   const gui = new GUI();
+  //gui修改位置
+  gui.domElement.style.position = "absolute";
+  gui.domElement.style.top = "50px";
+  gui.domElement.style.right = "0px";
+  //
   const spotLightFolder = gui.addFolder("SpotLight");
-  spotLightFolder.add(spotLight, "intensity", 0, 2);
-  spotLightFolder.add(spotLight, "angle", 0, Math.PI);
-  spotLightFolder.add(spotLight, "penumbra", 0, 1);
-  spotLightFolder.add(spotLight, "decay", 1, 2);
-  spotLightFolder.add(spotLight, "distance", 0, 200);
-  spotLightFolder.add(spotLight.position, "x", -100, 100);
-  spotLightFolder.add(spotLight.position, "y", -100, 100);
-  spotLightFolder.add(spotLight.position, "z", -100, 100);
+  spotLightFolder.add(spotLight, "intensity", 0, 2).onChange(render);
+  spotLightFolder.add(spotLight, "angle", 0, Math.PI).onChange(render);
+  spotLightFolder.add(spotLight, "penumbra", 0, 1).onChange(render);
+  spotLightFolder.add(spotLight, "decay", 1, 2).onChange(render);
+  spotLightFolder.add(spotLight, "distance", 0, 200).onChange(render);
+  spotLightFolder.add(spotLight.position, "x", -100, 100).onChange(render);
+  spotLightFolder.add(spotLight.position, "y", -100, 100).onChange(render);
+  spotLightFolder.add(spotLight.position, "z", -100, 100).onChange(render);
   spotLightFolder.addColor({ color: 0xffffff }, "color").onChange((e) => {
     spotLight.color.set(e);
+    render();
   });
   spotLightFolder.open();
 };
