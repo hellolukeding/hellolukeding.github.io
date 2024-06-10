@@ -1,4 +1,4 @@
-import { init } from "./scripts/init";
+import { init } from "./scripts/init1";
 
 export {};
 

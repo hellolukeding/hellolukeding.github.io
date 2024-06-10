@@ -1,59 +1,30 @@
+import { GUI } from "dat.gui";
 import * as THREE from "three";
 import { OrbitControls } from "three-orbitcontrols-ts";
-export const init = (container: HTMLDivElement | null) => {
+/*--------------------------------------- commonit ------------------------------------------*/
+export const commonInit = (container: HTMLDivElement | null) => {
   if (!container) return;
-
-  const renderer = initRenderer(container);
-  const scene = initScene();
-  const camera = initCamera();
-  const light = initLight();
-  listenResize(container, camera, renderer);
-  const controls = initOrbitController(camera, renderer);
-  scene.add(light);
-
-  // const geometry = new THREE.BoxGeometry(20, 20, 20);
-
-  // const materials = [
-  //   new THREE.MeshBasicMaterial({ color: 0x00ff00 }),
-  //   new THREE.MeshBasicMaterial({ color: 0x0000ff }),
-  //   new THREE.MeshBasicMaterial({ color: 0xff0000 }),
-  //   new THREE.MeshBasicMaterial({ color: 0xffff00 }),
-  //   new THREE.MeshBasicMaterial({ color: 0xff00ff }),
-  //   new THREE.MeshBasicMaterial({ color: 0x00ffff }),
-  // ];
-  // const mesh = new THREE.Mesh(geometry, materials);
-  // scene.add(mesh);
-
-  // // Create an edges geometry from the cube geometry
-  // const edges = new THREE.EdgesGeometry(mesh.geometry);
-
-  // // Create a line segments object with the edges geometry and a basic material
-  // const line = new THREE.LineSegments(
-  //   edges,
-  //   new THREE.LineBasicMaterial({ color: 0xffffff }) // Set the color of the lines
-  // );
-
-  // mesh.add(line);
-  initPlanet(scene, renderer, camera, controls);
-
-  renderer.render(scene, camera);
-  // const animate = () => {
-  //   requestAnimationFrame(animate);
-  //   mesh.rotation.x += 0.01;
-  //   mesh.rotation.y += 0.02;
-  //   renderer.render(scene, camera);
-  // };
-  // animate();
+  const renderer = RendererInit(container);
+  const scene = SceneInit();
+  const camera = CameraInit(container);
+  HelperInit(scene);
+  controllerInit(scene, camera, renderer);
   initMouseWheel(camera);
+  // LightInit(scene);
+  const spotLight = SpotLightInit(scene);
+  spotLightHelperInit(scene, spotLight);
+  initMesh(scene);
+  listenResize(container, camera, renderer);
+  GuiInit(spotLight);
+  renderer.render(scene, camera);
 };
 
 /*--------------------------------------- renderer ------------------------------------------*/
-export const initRenderer = (
-  container: HTMLDivElement
-): THREE.WebGLRenderer => {
+
+const RendererInit = (container: HTMLDivElement) => {
   const renderer = new THREE.WebGLRenderer({
-    antialias: true, // 抗锯齿
-    alpha: true, // 透明背景
+    antialias: true, //抗锯齿
+    alpha: true, //透明背景
   });
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -61,38 +32,138 @@ export const initRenderer = (
   return renderer;
 };
 
-/*--------------------------------------- scene ------------------------------------------*/
-
-export const initScene = (): THREE.Scene => {
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x1a1a1a);
-  scene.fog = new THREE.Fog(0x1a1a1a, 1, 1000);
-  return scene;
-};
-
 /*--------------------------------------- camera ------------------------------------------*/
-export const initCamera = () => {
+const CameraInit = (container: HTMLDivElement) => {
   const camera = new THREE.PerspectiveCamera(
     45,
-    window.innerWidth / window.innerHeight,
+    container.clientWidth / container.clientHeight,
     1,
     1000
   );
-  camera.position.set(0, 0, 100);
+  camera.position.set(50, 50, 50);
   camera.lookAt(0, 0, 0);
   return camera;
 };
 
-/*--------------------------------------- light ------------------------------------------*/
-export const initLight = () => {
-  const light = new THREE.AmbientLight(0xffffff, 3);
-  light.position.set(0, 0, 1);
+/*--------------------------------------- scene ------------------------------------------*/
+const SceneInit = () => {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1a1a);
+  // scene.fog = new THREE.Fog(0x1a1a1a, 1, 1000);
+  return scene;
+};
 
-  return light;
+/*--------------------------------------- helper ------------------------------------------*/
+const HelperInit = (scene: THREE.Scene) => {
+  // 坐标轴
+  const axesHelper = new THREE.AxesHelper(100);
+  scene.add(axesHelper);
+  // 网格
+  const gridHelper = new THREE.GridHelper(200, 200);
+  scene.add(gridHelper);
+};
+
+const spotLightHelperInit = (
+  scene: THREE.Scene,
+  spotLight: THREE.SpotLight
+) => {
+  const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+  scene.add(spotLightHelper);
+};
+
+/*--------------------------------------- controller ------------------------------------------*/
+const controllerInit = (
+  scene: THREE.Scene,
+  camera: THREE.PerspectiveCamera,
+  renderer: THREE.WebGLRenderer
+) => {
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.25;
+  controls.enableZoom = true;
+  controls.autoRotate = false;
+  controls.autoRotateSpeed = 0.5;
+  controls.enablePan = true;
+  controls.enableKeys = true;
+  controls.keys = {
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    BOTTOM: 40,
+  };
+  controls.mouseButtons = {
+    ORBIT: THREE.MOUSE.RIGHT, // 作用:旋转
+    ZOOM: THREE.MOUSE.MIDDLE, // 作用:缩放
+    PAN: THREE.MOUSE.LEFT, // 作用:平移
+  };
+
+  const tick = () => {
+    renderer.render(scene, camera);
+    controls.update();
+    requestAnimationFrame(tick);
+  };
+  tick();
+};
+
+/*--------------------------------------- wheel ------------------------------------------*/
+const initMouseWheel = (camera: THREE.PerspectiveCamera) => {
+  window.addEventListener(
+    "mousewheel",
+    (e) => {
+      e.preventDefault();
+      //@ts-ignore
+      camera.position.z += e.deltaY * 0.1;
+    },
+    { passive: false }
+  );
+};
+
+/*--------------------------------------- light ------------------------------------------*/
+const LightInit = (scene: THREE.Scene) => {
+  const light = new THREE.AmbientLight(0xffffff, 0.2);
+  light.position.set(0, 0, 1);
+  scene.add(light);
+};
+
+const SpotLightInit = (scene: THREE.Scene) => {
+  const spotLight = new THREE.SpotLight(0xffffff, 1, 100);
+  spotLight.position.set(50, 50, 35);
+  spotLight.target.position.set(0, 0, 0);
+  spotLight.angle = Math.PI / 6;
+  spotLight.penumbra = 0.1; //边缘模糊
+  scene.add(spotLight);
+  return spotLight;
+};
+
+/*--------------------------------------- mesh ------------------------------------------*/
+export const initMesh = (scene: THREE.Scene) => {
+  const geometry = new THREE.BoxGeometry(10, 10, 10);
+  const material = new THREE.MeshLambertMaterial({ color: 0x000000 });
+
+  const cube = new THREE.Mesh(geometry, material);
+  const edges = new THREE.EdgesGeometry(geometry);
+  const line = new THREE.LineSegments(
+    edges,
+    new THREE.LineBasicMaterial({ color: 0xffffff })
+  );
+  cube.add(line);
+
+  cube.position.set(5, 5, 5);
+  scene.add(cube);
+
+  // //plane
+  // const planeGeometry = new THREE.PlaneGeometry(100, 100);
+  // const planeMaterial = new THREE.MeshPhongMaterial({
+  //   color: 0x3f3f3f,
+  //   side: THREE.DoubleSide,
+  // });
+  // const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  // plane.rotation.x = -Math.PI / 2;
+  // scene.add(plane);
 };
 
 /*--------------------------------------- resize ------------------------------------------*/
-export const listenResize = (
+const listenResize = (
   container: HTMLDivElement,
   camera: THREE.PerspectiveCamera,
   renderer: THREE.WebGLRenderer
@@ -101,108 +172,24 @@ export const listenResize = (
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     camera.aspect = container.clientWidth / container.clientHeight; // 设置相机的长宽比
-    camera.updateProjectionMatrix();
-  });
-};
-/*--------------------------------------- obitcontroller ------------------------------------------*/
-export const initOrbitController = (
-  camera: THREE.PerspectiveCamera,
-  renderer: THREE.WebGLRenderer
-) => {
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-  controls.update();
-  return controls;
-};
-
-/*--------------------------------------- planet ------------------------------------------*/
-export const initPlanet = (
-  scene: THREE.Scene,
-  renderer: THREE.WebGLRenderer,
-  camera: THREE.PerspectiveCamera,
-  controls: OrbitControls
-) => {
-  const SphereMaterial = new THREE.MeshLambertMaterial({
-    color: 0x03c03c,
-    wireframe: true,
-  });
-  const SphereGeometry = new THREE.SphereGeometry(80, 32, 32);
-  const planet = new THREE.Mesh(SphereGeometry, SphereMaterial);
-  scene.add(planet);
-  /*---------------------------------------  ------------------------------------------*/
-  const TorusGeometry = new THREE.TorusGeometry(150, 8, 2, 120);
-  const TorusMaterial = new THREE.MeshLambertMaterial({
-    color: 0x40a9ff,
-    wireframe: true,
-  });
-  const ring = new THREE.Mesh(TorusGeometry, TorusMaterial);
-  ring.rotation.x = Math.PI / 2;
-  ring.rotation.y = -0.1 * (Math.PI / 2);
-  scene.add(ring);
-  /*---------------------------------------  ------------------------------------------*/
-  const IcoGeometry = new THREE.IcosahedronGeometry(16, 0);
-  const IcoMaterial = new THREE.MeshToonMaterial({ color: 0xfffc00 });
-  const satellite = new THREE.Mesh(IcoGeometry, IcoMaterial);
-  scene.add(satellite);
-  /*---------------------------------------  ------------------------------------------*/
-  const stars = new THREE.Group();
-  for (let i = 0; i < 500; i++) {
-    const geometry = new THREE.IcosahedronGeometry(Math.random() * 2, 0);
-    const material = new THREE.MeshToonMaterial({ color: 0xeeeeee });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.x = (Math.random() - 0.5) * 700;
-    mesh.position.y = (Math.random() - 0.5) * 700;
-    mesh.position.z = (Math.random() - 0.5) * 700;
-    mesh.rotation.x = Math.random() * 2 * Math.PI;
-    mesh.rotation.y = Math.random() * 2 * Math.PI;
-    mesh.rotation.z = Math.random() * 2 * Math.PI;
-    stars.add(mesh);
-  }
-  scene.add(stars);
-
-  let rot = 0;
-  // 动画
-  const axis = new THREE.Vector3(0, 0, 1);
-  const tick = () => {
-    // 更新渲染器
-    renderer.render(scene, camera);
-    // 给网格模型添加一个转动动画
-    rot += Math.random() * 0.8;
-    const radian = (rot * Math.PI) / 180;
-    // 星球位置动画
-    planet && (planet.rotation.y += 0.005);
-    // 星球轨道环位置动画
-    ring && ring.rotateOnAxis(axis, Math.PI / 400);
-    // 卫星位置动画
-    satellite.position.x = 250 * Math.sin(radian);
-    satellite.position.y = 100 * Math.cos(radian);
-    satellite.position.z = -100 * Math.cos(radian);
-    satellite.rotation.x += 0.005;
-    satellite.rotation.y += 0.005;
-    satellite.rotation.z -= 0.005;
-    // 星星动画
-    stars.rotation.y += 0.0009;
-    stars.rotation.z -= 0.0003;
-    // 更新控制器
-    controls.update();
-    // 页面重绘时调用自身
-    window.requestAnimationFrame(tick);
-  };
-  tick();
-};
-
-/*---------------------------------------  ------------------------------------------*/
-// 滚轮缩放大小
-export const initMouseWheel = (camera: THREE.PerspectiveCamera) => {
-  window.addEventListener("mousewheel", (e) => {
-    //@ts-ignore
-    camera.position.z += e.deltaY * 0.1;
+    camera.updateProjectionMatrix(); // 更新相机的矩阵
   });
 };
 
-/*---------------------------------------   ------------------------------------------*/
-export const destroy = () => {
-  window.removeEventListener("resize", () => {});
-  window.removeEventListener("mousewheel", () => {});
-  window.cancelAnimationFrame(0);
+/*--------------------------------------- gui ------------------------------------------*/
+const GuiInit = (spotLight: THREE.SpotLight) => {
+  const gui = new GUI();
+  const spotLightFolder = gui.addFolder("SpotLight");
+  spotLightFolder.add(spotLight, "intensity", 0, 2);
+  spotLightFolder.add(spotLight, "angle", 0, Math.PI);
+  spotLightFolder.add(spotLight, "penumbra", 0, 1);
+  spotLightFolder.add(spotLight, "decay", 1, 2);
+  spotLightFolder.add(spotLight, "distance", 0, 200);
+  spotLightFolder.add(spotLight.position, "x", -100, 100);
+  spotLightFolder.add(spotLight.position, "y", -100, 100);
+  spotLightFolder.add(spotLight.position, "z", -100, 100);
+  spotLightFolder.addColor({ color: 0xffffff }, "color").onChange((e) => {
+    spotLight.color.set(e);
+  });
+  spotLightFolder.open();
 };
