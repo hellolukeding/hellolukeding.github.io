@@ -7,26 +7,28 @@ export const commonInit = (container: HTMLDivElement | null) => {
   const renderer = RendererInit(container);
   const scene = SceneInit();
   const camera = CameraInit(container);
-  HelperInit(scene);
+  const [axesHelper, gridHelper] = HelperInit(scene);
   controllerInit(scene, camera, renderer);
-  const render = globalRender(scene, camera, renderer);
   initMouseWheel(camera);
   // LightInit(scene);
   const cube = initMesh(scene);
   const spotLight = initSpotLight(scene, cube);
-  spotLightHelperInit(scene, spotLight);
+  const spotLightHelper = spotLightHelperInit(scene, spotLight);
+  const render = globalRender(scene, camera, renderer, spotLightHelper);
   listenResize(container, camera, renderer);
-  GuiInit(spotLight, render);
+  GuiInit(spotLight, cube, [axesHelper, gridHelper], render);
   renderer.render(scene, camera);
 };
 
 const globalRender = (
   scene: THREE.Scene,
   camera: THREE.PerspectiveCamera,
-  renderer: THREE.WebGLRenderer
+  renderer: THREE.WebGLRenderer,
+  helper: THREE.SpotLightHelper
 ) => {
   return () => {
     renderer.render(scene, camera);
+    helper && helper.update();
   };
 };
 /*--------------------------------------- renderer ------------------------------------------*/
@@ -60,18 +62,21 @@ const CameraInit = (container: HTMLDivElement) => {
 const SceneInit = () => {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x1a1a1a);
-  // scene.fog = new THREE.Fog(0x1a1a1a, 1, 1000);
+  scene.fog = new THREE.Fog(0x1a1a1a, 1, 1000);
   return scene;
 };
 
 /*--------------------------------------- helper ------------------------------------------*/
-const HelperInit = (scene: THREE.Scene) => {
+const HelperInit = (
+  scene: THREE.Scene
+): [THREE.AxesHelper, THREE.GridHelper] => {
   // 坐标轴
-  const axesHelper = new THREE.AxesHelper(100);
+  const axesHelper = new THREE.AxesHelper(1000);
   scene.add(axesHelper);
   // 网格
-  // const gridHelper = new THREE.GridHelper(200, 200);
-  // scene.add(gridHelper);
+  const gridHelper = new THREE.GridHelper(200, 200);
+  scene.add(gridHelper);
+  return [axesHelper, gridHelper];
 };
 
 const spotLightHelperInit = (
@@ -80,6 +85,7 @@ const spotLightHelperInit = (
 ) => {
   const spotLightHelper = new THREE.SpotLightHelper(spotLight);
   scene.add(spotLightHelper);
+  return spotLightHelper;
 };
 
 /*--------------------------------------- controller ------------------------------------------*/
@@ -131,19 +137,27 @@ const initMouseWheel = (camera: THREE.PerspectiveCamera) => {
 
 /*--------------------------------------- light ------------------------------------------*/
 const LightInit = (scene: THREE.Scene) => {
-  const light = new THREE.AmbientLight(0xffffff, 0.2);
+  const light = new THREE.AmbientLight(0xffffff, 500);
   light.position.set(0, 0, 1);
   scene.add(light);
 };
 
 export const initSpotLight = (scene: THREE.Scene, target: THREE.Object3D) => {
-  const spotLight = new THREE.SpotLight(0x00ffff, 500);
-  spotLight.position.set(50, 50, 50);
+  const spotLight = new THREE.SpotLight(0xffffff, 500);
+  spotLight.position.set(30, 55, 30);
   spotLight.target = target;
-  spotLight.intensity = 1;
-  spotLight.distance = 100;
-  spotLight.angle = Math.PI / 4;
-  spotLight.penumbra = 0.1;
+  // spotLight.intensity = 1;//光照强度
+  spotLight.distance = 0;
+  spotLight.angle = Math.PI / 8;
+  spotLight.penumbra = 0.1; //边缘软化
+  spotLight.decay = 1; //光线衰减
+  spotLight.castShadow = true; // 产生阴影
+  spotLight.shadow.camera.near = 1;
+  spotLight.shadow.camera.far = 10;
+  spotLight.shadow.focus = 1;
+
+  spotLight.shadow.camera.near = 0.1;
+  spotLight.shadow.camera.far = 500;
   scene.add(spotLight);
   return spotLight;
 };
@@ -157,18 +171,21 @@ export const initMesh = (scene: THREE.Scene) => {
   const edges = new THREE.EdgesGeometry(geometry);
   const line = new THREE.LineSegments(
     edges,
-    new THREE.LineBasicMaterial({ color: 0xffffff })
+    new THREE.LineBasicMaterial({ color: 0x000000 })
   );
   cube.add(line);
 
   cube.position.set(5, 5, 5);
+
+  cube.castShadow = true; // 产生阴影
   scene.add(cube);
 
   // //plane
-  const planeGeometry = new THREE.PlaneGeometry(100, 100);
-  const planeMaterial = new THREE.MeshLambertMaterial({ color: 0xfff });
+  const planeGeometry = new THREE.PlaneGeometry(500, 500);
+  const planeMaterial = new THREE.MeshPhongMaterial({ color: 0x808080 });
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.rotation.x = -Math.PI / 2;
+  plane.position.y = -150;
   plane.castShadow = true; // 接收阴影
   plane.receiveShadow = true; // 产生阴影
   scene.add(plane);
@@ -190,7 +207,12 @@ const listenResize = (
 };
 
 /*--------------------------------------- gui ------------------------------------------*/
-const GuiInit = (spotLight: THREE.SpotLight, render: () => void) => {
+const GuiInit = (
+  spotLight: THREE.SpotLight,
+  cube: THREE.Object3D,
+  helper: [THREE.AxesHelper, THREE.GridHelper],
+  render: () => void
+) => {
   const gui = new GUI();
   //gui修改位置
   gui.domElement.style.position = "absolute";
@@ -198,7 +220,7 @@ const GuiInit = (spotLight: THREE.SpotLight, render: () => void) => {
   gui.domElement.style.right = "0px";
   //
   const spotLightFolder = gui.addFolder("SpotLight");
-  spotLightFolder.add(spotLight, "intensity", 0, 2).onChange(render);
+  spotLightFolder.add(spotLight, "intensity", 1, 1000).onChange(render);
   spotLightFolder.add(spotLight, "angle", 0, Math.PI).onChange(render);
   spotLightFolder.add(spotLight, "penumbra", 0, 1).onChange(render);
   spotLightFolder.add(spotLight, "decay", 1, 2).onChange(render);
@@ -210,5 +232,34 @@ const GuiInit = (spotLight: THREE.SpotLight, render: () => void) => {
     spotLight.color.set(e);
     render();
   });
-  spotLightFolder.open();
+  //spotLightFolder.open();
+  //
+  const cubeHelper = gui.addFolder("Cube");
+  cubeHelper.add(cube.position, "x", -1000, 1000).onChange(render);
+  cubeHelper.add(cube.position, "y", -1000, 1000).onChange(render);
+  cubeHelper.add(cube.position, "z", -1000, 1000).onChange(render);
+  cubeHelper
+    .add(cube.scale, "x", 0, 10)
+    .name("x-scale")
+    .onChange(render);
+  cubeHelper
+    .add(cube.scale, "y", 0, 10)
+    .name("y-scale")
+    .onChange(render);
+  cubeHelper
+    .add(cube.scale, "z", 0, 10)
+    .name("z-scale")
+    .onChange(render);
+  //helper
+  const helperFolder = gui.addFolder("Helper");
+  helperFolder
+    .add(helper[0], "visible")
+    .onChange(render)
+    .name("axes-helper");
+  helperFolder
+    .add(helper[1], "visible")
+    .onChange(render)
+    .name("grid-helper");
+  // Remove the line that adds the "size" property to the GUI folder
+  // helperFolder.add(helper[1], "size", 10, 100).onChange(render);
 };
