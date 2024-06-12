@@ -1,4 +1,5 @@
 import {
+  ArcticonsModel3d,
   CarbonDataBlob,
   FluentMusicNote2Play20Filled,
   GameIconsThunderBlade,
@@ -98,6 +99,12 @@ export const key2NodeMP: Map<string, MenuItem[]> = new Map([
         icon: <MaterialSymbols3dRotation />,
         navi: "/toolkit/3dlab",
         key: "3dlab",
+      },
+      {
+        name: "GLTF查看",
+        icon: <ArcticonsModel3d />,
+        navi: "/toolkit/gltfviewer",
+        key: "gltfviewer",
       },
     ],
   ],

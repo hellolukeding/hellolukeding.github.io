@@ -2,8 +2,10 @@ import { GUI } from "dat.gui";
 import * as THREE from "three";
 import { OrbitControls } from "three-orbitcontrols-ts";
 /*--------------------------------------- commonit ------------------------------------------*/
-export const commonInit = (container: HTMLDivElement | null) => {
-  if (!container) return;
+export const commonInit = (
+  container: HTMLDivElement | null
+): (() => void) | null => {
+  if (!container) return null;
   const renderer = RendererInit(container);
   const scene = SceneInit();
   const camera = CameraInit(container);
@@ -16,8 +18,21 @@ export const commonInit = (container: HTMLDivElement | null) => {
   const spotLightHelper = spotLightHelperInit(scene, spotLight);
   const render = globalRender(scene, camera, renderer, spotLightHelper);
   listenResize(container, camera, renderer);
-  GuiInit(spotLight, cube, [axesHelper, gridHelper], render);
+  const gui = GuiInit(spotLight, cube, [axesHelper, gridHelper], render);
   renderer.render(scene, camera);
+
+  return () => {
+    guiDestroy(gui);
+    rendererDestroy(renderer);
+  };
+};
+
+const guiDestroy = (gui: GUI) => {
+  gui.destroy();
+};
+
+const rendererDestroy = (renderer: THREE.WebGLRenderer) => {
+  renderer.dispose();
 };
 
 const globalRender = (
@@ -262,4 +277,6 @@ const GuiInit = (
     .name("grid-helper");
   // Remove the line that adds the "size" property to the GUI folder
   // helperFolder.add(helper[1], "size", 10, 100).onChange(render);
+
+  return gui;
 };

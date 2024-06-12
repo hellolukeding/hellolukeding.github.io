@@ -2,6 +2,7 @@ import { Navigate, RouteObject, createHashRouter } from "react-router-dom";
 import Blog from "src/pages/Blog";
 import BlogContainer from "src/pages/Blog/BlogContainer";
 import RenderMD from "src/pages/Blog/RenderMD";
+import GLTFViewer from "src/pages/GLTFViewer";
 import Game from "src/pages/Game";
 import ImgBed from "src/pages/ImgBed";
 import Interview from "src/pages/Interview";
@@ -51,6 +52,14 @@ const routers: RouteObject[] = [
       title: "思维导图",
     },
   },
+  {
+    path: "toolkit/gltfviewer",
+    element: <GLTFViewer />,
+    handle: {
+      title: "GLTFViewer",
+    },
+  },
+  /*---------------------------------------  ------------------------------------------*/
   {
     path: "blog",
     element: <BlogContainer />,

@@ -6,7 +6,11 @@ interface GltfViewerProps {}
 const Lab3D: React.FC<GltfViewerProps> = (props) => {
   const mainRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    commonInit(mainRef.current);
+    const destroy = commonInit(mainRef.current);
+
+    return () => {
+      destroy?.();
+    };
   }, []);
   return <article className={styles["main"]} ref={mainRef}></article>;
 };
