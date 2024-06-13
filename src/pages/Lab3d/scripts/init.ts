@@ -87,6 +87,8 @@ const HelperInit = (
 ): [THREE.AxesHelper, THREE.GridHelper] => {
   // 坐标轴
   const axesHelper = new THREE.AxesHelper(1000);
+  //设置宽度
+
   scene.add(axesHelper);
   // 网格
   const gridHelper = new THREE.GridHelper(200, 200);
