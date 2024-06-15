@@ -120,4 +120,11 @@ const listenResize = (
 const initGLTFLoader = (scene: THREE.Scene, gltf: GLTF) => {
   const loader = new GLTFLoader();
   console.log(gltf, "gltf");
+  if (gltf?.asset?.version !== "2.0") {
+    console.error("GLTF version must be 2.0");
+    return;
+  }
+  loader.parse(JSON.stringify(gltf), "", (gltf) => {
+    scene.add(gltf.scene);
+  });
 };
