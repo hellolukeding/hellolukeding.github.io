@@ -25,14 +25,19 @@ const GLTFViewer: React.FC<GLTFViewerProps> = (props) => {
         const reader = new FileReader();
         reader.onload = (e) => {
           const result = e.target?.result;
-          if (typeof result === "string") {
-            const gltf = JSON.parse(result);
-            dispose();
-            setDragged(true);
-            init(readerRef.current, gltf);
-          }
+          console.log(result, "result");
+          dispose();
+          setDragged(true);
+          init(readerRef.current, result as ArrayBuffer);
+          // initGLTFLoader(scene, result);
+          // if (typeof result === "string") {
+          //   const gltf = JSON.parse(result);
+          //   dispose();
+          //   setDragged(true);
+          //   init(readerRef.current, gltf);
+          // }
         };
-        reader.readAsText(file);
+        reader.readAsArrayBuffer(file);
       }
     };
 

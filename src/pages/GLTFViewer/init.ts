@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three-orbitcontrols-ts";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
-export const init = (container: HTMLDivElement | null, gltf: GLTF) => {
+export const init = (container: HTMLDivElement | null, gltf: ArrayBuffer) => {
   if (!container) return;
   const renderer = initRenderer(container);
   const scene = initScene();
@@ -117,14 +117,11 @@ const listenResize = (
 };
 
 /*--------------------------------------- loader ------------------------------------------*/
-const initGLTFLoader = (scene: THREE.Scene, gltf: GLTF) => {
+const initGLTFLoader = (scene: THREE.Scene, gltf: ArrayBuffer) => {
   const loader = new GLTFLoader();
-  console.log(gltf, "gltf");
-  if (gltf?.asset?.version !== "2.0") {
-    console.error("GLTF version must be 2.0");
-    return;
-  }
-  loader.parse(JSON.stringify(gltf), "", (gltf) => {
+
+  loader.parse(gltf, "", (gltf: GLTF) => {
+    console.log(gltf, "gltf");
     scene.add(gltf.scene);
   });
 };
