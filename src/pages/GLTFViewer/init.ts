@@ -12,7 +12,7 @@ export const init = (container: HTMLDivElement | null, gltf: ArrayBuffer) => {
   initController(scene, camera, renderer);
   initMouseWheel(camera);
   listenResize(container, camera, renderer);
-  initGLTFLoader(scene, gltf);
+  initGLTFLoader(scene, gltf, camera);
   renderer?.render(scene, camera);
 };
 
@@ -117,11 +117,27 @@ const listenResize = (
 };
 
 /*--------------------------------------- loader ------------------------------------------*/
-const initGLTFLoader = (scene: THREE.Scene, gltf: ArrayBuffer) => {
+const initGLTFLoader = (
+  scene: THREE.Scene,
+  gltf: ArrayBuffer,
+  camera: THREE.PerspectiveCamera
+) => {
   const loader = new GLTFLoader();
 
   loader.parse(gltf, "", (gltf: GLTF) => {
     console.log(gltf, "gltf");
     scene.add(gltf.scene);
+    camera.lookAt(gltf.scene.position);
+    //camera 靠近模型
+    const boundingBox = new THREE.Box3().setFromObject(gltf.scene);
+    const size = boundingBox.getSize(new THREE.Vector3()).length();
+    const center = boundingBox.getCenter(new THREE.Vector3());
+    console.log(size, "size");
+    console.log(center, "center");
+    camera.position.copy(center);
+    camera.position.x += 0;
+    camera.position.y += size / 5.0;
+    camera.position.z += 0;
+    camera.lookAt(center);
   });
 };
