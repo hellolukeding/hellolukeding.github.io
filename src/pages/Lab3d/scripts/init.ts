@@ -1,6 +1,12 @@
 import { GUI } from "dat.gui";
 import * as THREE from "three";
-import { OrbitControls } from "three-orbitcontrols-ts";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
+import { OutputPass } from "three/examples/jsm/postprocessing/OutputPass";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+import { LuminosityShader } from "three/examples/jsm/shaders/LuminosityShader";
 /*--------------------------------------- commonit ------------------------------------------*/
 export const commonInit = (
   container: HTMLDivElement | null
@@ -19,6 +25,9 @@ export const commonInit = (
   const render = globalRender(scene, camera, renderer, spotLightHelper);
   listenResize(container, camera, renderer);
   const gui = GuiInit(spotLight, cube, [axesHelper, gridHelper], render);
+
+  const animate = animationRun(renderer, camera, scene);
+  animate();
   renderer.render(scene, camera);
 
   return () => {
@@ -112,25 +121,15 @@ const controllerInit = (
   renderer: THREE.WebGLRenderer
 ) => {
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.25;
-  controls.enableZoom = true;
-  controls.autoRotate = false;
-  controls.autoRotateSpeed = 0.5;
   controls.enablePan = true;
-  controls.enableKeys = true;
-  controls.keys = {
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    BOTTOM: 40,
-  };
-  controls.mouseButtons = {
-    ORBIT: THREE.MOUSE.RIGHT, // 作用:旋转
-    ZOOM: THREE.MOUSE.MIDDLE, // 作用:缩放
-    PAN: THREE.MOUSE.LEFT, // 作用:平移
-  };
-
+  controls.enableZoom = true;
+  // controls.enableRotate = true;
+  controls.enableDamping = true; // 作用是使动画很平滑
+  controls.dampingFactor = 0.03;
+  controls.zoomSpeed = 1;
+  // controls.rotateSpeed = 1;
+  //限制旋转角度
+  controls.maxPolarAngle = Math.PI / 2;
   const tick = () => {
     renderer.render(scene, camera);
     controls.update();
@@ -146,7 +145,7 @@ const initMouseWheel = (camera: THREE.PerspectiveCamera) => {
     (e) => {
       e.preventDefault();
       //@ts-ignore
-      camera.position.z += e.deltaY * 0.1;
+      // camera.position.z += e.deltaY * 0.1;
     },
     { passive: false }
   );
@@ -281,4 +280,28 @@ const GuiInit = (
   // helperFolder.add(helper[1], "size", 10, 100).onChange(render);
 
   return gui;
+};
+
+/*--------------------------------------- animation ------------------------------------------*/
+const animationRun = (
+  renderer: THREE.WebGLRenderer,
+  camera: THREE.PerspectiveCamera,
+  scene: THREE.Scene
+) => {
+  const composer = new EffectComposer(renderer); // 后期处理
+
+  const animate = () => {
+    requestAnimationFrame(animate);
+    composer.render();
+  };
+
+  const renderPass = new RenderPass(scene, camera); // 渲染通道
+  const glitchPass = new GlitchPass(); // 故障通道
+  const outputPass = new OutputPass(); // 输出通道
+  const luminosityPass = new ShaderPass(LuminosityShader); // 亮度通道
+  composer.addPass(renderPass);
+  composer.addPass(glitchPass);
+  composer.addPass(outputPass);
+  composer.addPass(luminosityPass);
+  return animate;
 };
