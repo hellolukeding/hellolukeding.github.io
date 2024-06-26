@@ -1,15 +1,16 @@
 import { useEffect, useRef } from "react";
 import styles from "./index.module.scss";
-import { commonInit } from "./scripts/init";
+import ViewerService from "./scripts/ViewerService";
 interface GltfViewerProps {}
 
 const Lab3D: React.FC<GltfViewerProps> = (props) => {
   const mainRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const destroy = commonInit(mainRef.current);
-
+    if (!mainRef.current) return;
+    const viewerService = new ViewerService(mainRef.current);
+    viewerService.init();
     return () => {
-      destroy?.();
+      viewerService.destroy();
     };
   }, []);
   return <article className={styles["main"]} ref={mainRef}></article>;

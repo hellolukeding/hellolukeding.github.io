@@ -96,8 +96,6 @@ const HelperInit = (
 ): [THREE.AxesHelper, THREE.GridHelper] => {
   // 坐标轴
   const axesHelper = new THREE.AxesHelper(1000);
-  //设置宽度
-
   scene.add(axesHelper);
   // 网格
   const gridHelper = new THREE.GridHelper(200, 200);
@@ -300,8 +298,8 @@ const animationRun = (
   const outputPass = new OutputPass(); // 输出通道
   const luminosityPass = new ShaderPass(LuminosityShader); // 亮度通道
   composer.addPass(renderPass);
-  composer.addPass(glitchPass);
+  // composer.addPass(glitchPass);
   composer.addPass(outputPass);
-  composer.addPass(luminosityPass);
+  // composer.addPass(luminosityPass);
   return animate;
 };
