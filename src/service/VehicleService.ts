@@ -8,7 +8,10 @@ class VehicleService {
   world: CANNON.World;
   scene: THREE.Scene;
   car?: {};
-  chassis?: { helpChassisMat: THREE.MeshBasicMaterial };
+  chassis?: GLTF["scene"];
+  chassisHelpChassisGeo?: THREE.BoxGeometry;
+  chassisHelpChassisMat?: THREE.MeshBasicMaterial;
+  chassisHelpChassis?: THREE.Mesh;
   chassisModel?: GLTF;
   wheelModel?: {};
   wheels?: never[];
@@ -90,6 +93,21 @@ class VehicleService {
     dracoLoader.setDecoderPath("draco/");
 
     gltfLoader.setDRACOLoader(dracoLoader);
+
+    gltfLoader.load("/models/mclaren/draco/chassis.gltf", (gltf) => {
+      this.chassisModel = gltf;
+      this.chassis = gltf.scene;
+      this.chassisHelpChassisGeo = new THREE.BoxGeometry(1, 1, 1);
+      this.chassisHelpChassisMat = new THREE.MeshBasicMaterial({
+        color: 0xff0000,
+        wireframe: true,
+      });
+      this.chassisHelpChassis = new THREE.Mesh(
+        this.chassisHelpChassisGeo,
+        this.chassisHelpChassisMat
+      );
+      this.scene.add(this.chassis, this.chassisHelpChassis);
+    });
   }
 }
 
