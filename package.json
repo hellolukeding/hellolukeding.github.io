@@ -6,6 +6,7 @@
     "@monaco-editor/react": "^4.6.0",
     "@typescript/ata": "^0.9.4",
     "ahooks": "^3.7.8",
+    "cannon-es": "^0.20.0",
     "github-markdown-css": "^5.4.0",
     "highlight.js": "^11.9.0",
     "lodash": "^4.17.21",

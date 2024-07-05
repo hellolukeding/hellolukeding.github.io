@@ -10,6 +10,7 @@ import Lab3d from "src/pages/Lab3d";
 import Music from "src/pages/Music";
 import PlayGround from "src/pages/PlayGorund";
 import ToolKit from "src/pages/ToolKit";
+import Vehicle from "src/pages/Vehicle";
 import Welcome from "src/pages/Welcome";
 
 const routers: RouteObject[] = [
@@ -57,6 +58,13 @@ const routers: RouteObject[] = [
     element: <GLTFViewer />,
     handle: {
       title: "GLTFViewer",
+    },
+  },
+  {
+    path: "toolkit/vehicle",
+    element: <Vehicle />,
+    handle: {
+      title: "车辆",
     },
   },
   /*---------------------------------------  ------------------------------------------*/
