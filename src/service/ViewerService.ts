@@ -1,5 +1,7 @@
+import { Stats } from "stats.ts";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import PhysicsService from "./PhysicsService";
 class ViewerService {
   private container: HTMLDivElement;
   private scene?: THREE.Scene;
@@ -44,6 +46,7 @@ class ViewerService {
 
     this.helperInit();
     this.controllerInit();
+    this.showStats();
   }
 
   getViewer() {
@@ -56,6 +59,11 @@ class ViewerService {
       camera: this.camera,
     };
   }
+
+  physics2do(physicsService: PhysicsService) {
+    physicsService.init();
+  }
+
   /*--------------------------------------- 私有方法 ------------------------------------------*/
   private helperInit() {
     const axesHelper = new THREE.AxesHelper(99999999);
@@ -80,6 +88,22 @@ class ViewerService {
     const tick = () => {
       this.renderer!.render(this.scene!, this.camera!);
       // controls.update();
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  private showStats() {
+    const stats = new Stats();
+    stats.showPanel(0);
+    this.container.appendChild(stats.dom);
+    stats.dom.setAttribute(
+      "style",
+      "position: absolute; top: 61px;left: 10px;"
+    );
+    const tick = () => {
+      stats.begin();
+      stats.end();
       requestAnimationFrame(tick);
     };
     tick();
