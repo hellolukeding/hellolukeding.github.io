@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import PhysicsService from "./PhysicsService";
 class ViewerService {
-  private container: HTMLDivElement;
+  private container?: HTMLDivElement;
   private scene?: THREE.Scene;
   private camera?: THREE.Camera;
   private renderer?: THREE.WebGLRenderer;
@@ -11,15 +11,14 @@ class ViewerService {
   axesHelper?: THREE.AxesHelper;
   gridHelper?: THREE.GridHelper;
 
-  constructor(container: HTMLDivElement | null) {
+  constructor() {}
+
+  /*--------------------------------------- 公共方法 ------------------------------------------*/
+  init(container: HTMLDivElement | null) {
     if (!container) {
       throw new Error("container is null");
     }
     this.container = container;
-  }
-
-  /*--------------------------------------- 公共方法 ------------------------------------------*/
-  init() {
     const renderer = new THREE.WebGLRenderer({
       antialias: true, //抗锯齿
       alpha: true, //透明背景
@@ -96,7 +95,7 @@ class ViewerService {
   private showStats() {
     const stats = new Stats();
     stats.showPanel(0);
-    this.container.appendChild(stats.dom);
+    this.container!.appendChild(stats.dom);
     stats.dom.setAttribute(
       "style",
       "position: absolute; top: 61px;left: 10px;"
@@ -110,4 +109,5 @@ class ViewerService {
   }
 }
 
-export default ViewerService;
+const viewerService = new ViewerService();
+export default viewerService;

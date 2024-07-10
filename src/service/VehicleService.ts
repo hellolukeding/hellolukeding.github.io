@@ -84,7 +84,7 @@ class VehicleService {
   }
   /*--------------------------------------- common ------------------------------------------*/
   public init() {
-    // this.loadModels();
+    this.loadModels();
     // this.setChassis();
     // this.setWheels();
     // this.controls();
