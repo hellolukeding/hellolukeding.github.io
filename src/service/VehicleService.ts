@@ -18,10 +18,10 @@ class VehicleService {
   chassisHelpChassisMat?: THREE.MeshBasicMaterial;
   chassisHelpChassis?: THREE.Mesh;
   chassisModel?: GLTF;
-  wheelModel?: THREE.Group<THREE.Object3DEventMap>[];
-  wheels?: any[];
-  chassisDimension?: { x: number; y: number; z: number };
-  wheelScale?: { frontWheel: number; hindWheel: number };
+  wheelModel: THREE.Group<THREE.Object3DEventMap>[] = [];
+  wheels: any[];
+  chassisDimension: { x: number; y: number; z: number };
+  wheelScale: { frontWheel: number; hindWheel: number };
   chassisModelPos: Pos;
   controlOptions: {
     maxSteerVal: number;
@@ -84,66 +84,58 @@ class VehicleService {
   }
   /*--------------------------------------- common ------------------------------------------*/
   public init() {
-    this.loadModels();
-    // this.setChassis();
-    // this.setWheels();
+    // this.loadModels();
+    this.setChassis();
+    this.setWheels();
     // this.controls();
     // this.update();
     console.log("vehicle init done!");
   }
+
   /*--------------------------------------- private ------------------------------------------*/
-  private loadModels() {
-    const dracoModuleConfig = {
-      onModuleLoaded: (draco: any) => {
-        // Draco is loaded
-        console.log(draco);
-        console.log("Draco is loaded");
-      },
-      wasmMemory: new WebAssembly.Memory({ initial: 256, maximum: 512 }),
-    };
+  public loadModels() {
     const gltfLoader = new GLTFLoader(this.loadingManager);
     const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderConfig(dracoModuleConfig);
-    dracoLoader.setDecoderPath("draco/");
+    dracoLoader.setDecoderConfig({
+      type: "js",
+    });
+    dracoLoader.setDecoderPath("/draco/gltf/");
     gltfLoader.setDRACOLoader(dracoLoader);
-
-    //加载车身模型
-    // gltfLoader.load("/models/mclaren/draco/chassis.gltf", (gltf) => {
-    //   this.chassisModel = gltf;
-    //   this.chassis = gltf.scene;
-    //   this.chassisHelpChassisGeo = new THREE.BoxGeometry(1, 1, 1);
-    //   this.chassisHelpChassisMat = new THREE.MeshBasicMaterial({
-    //     color: 0xff0000,
-    //     wireframe: true,
-    //   });
-    //   this.chassisHelpChassis = new THREE.Mesh(
-    //     this.chassisHelpChassisGeo,
-    //     this.chassisHelpChassisMat
-    //   );
-    //   this.scene.add(this.chassis, this.chassisHelpChassis);
-    // });
-    return;
+    // 加载车身模型
+    gltfLoader.load("/models/mclaren/draco/chassis.gltf", (gltf) => {
+      this.chassisModel = gltf;
+      this.chassis = gltf.scene;
+      this.chassisHelpChassisGeo = new THREE.BoxGeometry(1, 1, 1);
+      this.chassisHelpChassisMat = new THREE.MeshBasicMaterial({
+        color: 0xff0000,
+        wireframe: true,
+      });
+      this.chassisHelpChassis = new THREE.Mesh(
+        this.chassisHelpChassisGeo,
+        this.chassisHelpChassisMat
+      );
+      this.scene.add(this.chassis, this.chassisHelpChassis);
+    });
 
     //加载轮子模型
     for (let i = 0; i < 4; i++) {
       gltfLoader.load(`/models/mclaren/draco/wheel.gltf`, (gltf) => {
-        // this.wheelModel![i] = gltf.scene;
-        // this.scene.add(this.wheelModel![i]);
         const model = gltf.scene;
-        if (i === 1 || i === 3) {
-          this.wheelModel![i].scale.set(
+        if (i % 2 === 1) {
+          model.scale.set(
             -1 * this.wheelScale!.frontWheel,
             this.wheelScale!.frontWheel,
             -1 * this.wheelScale!.frontWheel
           );
         } else {
-          this.wheelModel![i].scale.set(
+          model.scale.set(
             this.wheelScale!.frontWheel,
             this.wheelScale!.frontWheel,
             this.wheelScale!.frontWheel
           );
         }
-        this.scene.add(this.wheelModel![i]);
+        this.wheelModel.push(model);
+        this.scene.add(model);
       });
     }
   }
@@ -151,9 +143,9 @@ class VehicleService {
   private setChassis() {
     const chassisShape = new CANNON.Box(
       new CANNON.Vec3(
-        this.chassisDimension!.x * 0.5,
-        this.chassisDimension!.y * 0.5,
-        this.chassisDimension!.z * 0.5
+        this.chassisDimension.x * 0.5,
+        this.chassisDimension.y * 0.5,
+        this.chassisDimension.z * 0.5
       )
     );
     const chassisBody = new CANNON.Body({
@@ -161,11 +153,11 @@ class VehicleService {
       material: new CANNON.Material({ friction: 0 }),
     });
     chassisBody.addShape(chassisShape);
-    this.chassisHelpChassis!.visible = false;
-    this.chassisHelpChassis!.scale.set(
-      this.chassisDimension!.x,
-      this.chassisDimension!.y,
-      this.chassisDimension!.z
+
+    this.chassisHelpChassis?.scale.set(
+      this.chassisDimension.x,
+      this.chassisDimension.y,
+      this.chassisDimension.z
     );
 
     this.car = new CANNON.RaycastVehicle({
@@ -201,18 +193,21 @@ class VehicleService {
       this.car!.wheelInfos[index].chassisConnectionPointLocal.copy(position);
     };
 
-    this.car!.wheelInfos = [];
-    this.car!.addWheel(options);
-    this.car!.addWheel(options);
-    this.car!.addWheel(options);
-    this.car!.addWheel(options);
+    const wheelPos: [number, number, number][] = [
+      [0.75, 0.1, -1.32],
+      [-0.78, 0.1, -1.32],
+      [0.75, 0.1, 1.25],
+      [-0.78, 0.1, 1.25],
+    ];
 
-    setWheelChassisConnectionPoint(0, new CANNON.Vec3(0.75, 0.1, -1.32));
-    setWheelChassisConnectionPoint(1, new CANNON.Vec3(-0.78, 0.1, -1.32));
-    setWheelChassisConnectionPoint(2, new CANNON.Vec3(0.75, 0.1, 1.25));
-    setWheelChassisConnectionPoint(3, new CANNON.Vec3(-0.78, 0.1, 1.25));
-
-    this.car!.wheelInfos.forEach((wheel, index) => {
+    wheelPos.forEach((position, index) => {
+      const pos = new CANNON.Vec3(position[0], position[1], position[2]);
+      options.chassisConnectionPointLocal = pos;
+      this.car!.addWheel(options);
+      this.wheelModel[index]?.position.set(pos.x, pos.y, pos.z);
+    });
+    // return;
+    this.car?.wheelInfos.forEach((wheel, index) => {
       const cylinderShape = new CANNON.Cylinder(
         wheel.radius,
         wheel.radius,
@@ -231,15 +226,17 @@ class VehicleService {
         0
       );
       wheelBody.addShape(cylinderShape, new CANNON.Vec3(), quaternion);
-      this.wheels![index].wheelBody = wheelBody;
-      this.wheels![index].helpWheelsGeo = new THREE.CylinderGeometry(
-        wheel.radius,
-        wheel.radius,
-        wheel.radius / 2,
-        20
-      );
-      this.wheels![index].helpWheelsGeo.rotateZ(Math.PI / 2);
-      this.wheels![index].helpWheelsMat = new THREE.MeshBasicMaterial({
+      (this.car!.wheelInfos[index] as any).wheelBody = wheelBody;
+      this.wheels.push({
+        helpWheelsGeo: new THREE.CylinderGeometry(
+          wheel.radius,
+          wheel.radius,
+          wheel.radius / 2,
+          20
+        ),
+      });
+      this.wheels[index].helpWheelsGeo.rotateZ(Math.PI / 2);
+      this.wheels[index].helpWheelsMat = new THREE.MeshBasicMaterial({
         color: 0x00ffff,
         wireframe: true,
       });
@@ -247,7 +244,9 @@ class VehicleService {
         this.wheels![index].helpWheelsGeo,
         this.wheels![index].helpWheelsMat
       );
-      this.wheels![index].helpWheels.visible = false;
+      this.wheels![index].helpWheels.position.copy(
+        this.car!.wheelInfos[index].chassisConnectionPointLocal
+      );
       this.scene.add(this.wheels![index].helpWheels);
     });
   }

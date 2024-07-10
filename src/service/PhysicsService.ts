@@ -23,14 +23,14 @@ class PhysicsService {
   /*--------------------------------------- common ------------------------------------------*/
   init() {
     console.log("physics init done!");
-    // this.materialInit();
-    this.vehicleService.init();
+    this.materialInit();
+    this.vehicleService.loadModels();
   }
   /*--------------------------------------- private ------------------------------------------*/
 
   private loaderInit() {
     this.loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
-      console.log(`Loading file: ${url}, ${itemsLoaded}/${itemsTotal}`);
+      // console.log(`Loading file: ${url}, ${itemsLoaded}/${itemsTotal}`);
       if (itemsLoaded === itemsTotal) {
         console.log("All loaded");
       }
