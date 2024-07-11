@@ -376,6 +376,12 @@ ConstrainedBox(
 
 # 常规布局
 
+## 布局限制的核心思想
+
+- 上层组件只传递限制条件
+- 子组件向上层传递位置与大小（相对于父组件）
+- 父组件决定子组件的位置
+
 ## 线性布局（Row 和 Column）
 
 ```dart
@@ -484,3 +490,58 @@ BoxDecoration({
   BoxShape shape = BoxShape.rectangle, //形状
 })
 ```
+
+# 滚动组件 （RenderSliver）
+
+> sliver(薄片),性能优化，当组件到达视口后才开始渲染
+
+可滚动组件三个要素
+
+- Scrollable ：用于处理滑动手势，确定滑动偏移，滑动偏移变化时构建 Viewport 。
+- Viewport：显示的视窗，即列表的可视区域；
+- Sliver：视窗里显示的元素。
+
+具体布局过程：
+
+1. Scrollable 监听到用户滑动行为后，根据最新的滑动偏移构建 Viewport 。
+2. Viewport 将当前视口信息和配置信息通过 SliverConstraints 传递给 Sliver。
+3. Sliver 中对子组件（RenderBox）按需进行构建和布局，然后确认自身的位置、绘制等信息，保存在 geometry 中（一个 SliverGeometry 类型的对象）。
+
+## Scrollable
+
+> 处理滑动手势，确定滑动偏移，滑动偏移变化时重新构建 viewport
+
+```dart
+Scrollable({
+  ...
+  this.axisDirection = AxisDirection.down, //滚动方向
+  this.controller, //scrollController对象，控制滚动位置和监听滚动事件
+  this.physics, //ScrollPhysics 对象，决定了可滚动组件如何响应用户的操作
+  required this.viewportBuilder, // 构建viewPort的回调
+})
+```
+
+## Viewport
+
+> 用于显示在视口中的 `sliver`
+
+```dart
+Viewport({
+  Key? key,
+  this.axisDirection = AxisDirection.down,
+  this.crossAxisDirection,
+  this.anchor = 0.0,
+  required ViewportOffset offset, // 用户的滚动偏移
+  // 类型为Key，表示从什么地方开始绘制，默认是第一个元素
+  this.center,
+  this.cacheExtent, // 预渲染区域
+  //该参数用于配合解释cacheExtent的含义，也可以为主轴长度的乘数
+  this.cacheExtentStyle = CacheExtentStyle.pixel,
+  this.clipBehavior = Clip.hardEdge,
+  List<Widget> slivers = const <Widget>[], // 需要显示的 Sliver 列表
+})
+```
+
+cacheExtent 和 cacheExtentStyle：CacheExtentStyle 是一个枚举，有 pixel 和 viewport 两个取值。当 cacheExtentStyle 值为 pixel 时，cacheExtent 的值为预渲染区域的具体像素长度；当值为 viewport 时，cacheExtent 的值是一个乘数，表示有几个 viewport 的长度，最终的预渲染区域的像素长度为：cacheExtent \* viewport 的积， 这在每一个列表项都占满整个 Viewport 时比较实用，这时 cacheExtent 的值就表示前后各缓存几个页面。
+
+## sliver
