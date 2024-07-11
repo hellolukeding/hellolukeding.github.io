@@ -12,17 +12,28 @@ class VehicleService {
   loadingManager: THREE.LoadingManager;
   world: CANNON.World;
   scene: THREE.Scene;
+
   car?: CANNON.RaycastVehicle;
-  chassis?: GLTF["scene"];
-  chassisHelpChassisGeo?: THREE.BoxGeometry;
-  chassisHelpChassisMat?: THREE.MeshBasicMaterial;
+  chassis?: GLTF["scene"]; //车身模型
+  chassisPhysicsBody?: CANNON.Body; //车身物理模型
+  chassisHelpChassisGeo?: THREE.BoxGeometry; //车身辅助模型
+  chassisHelpChassisMat?: THREE.MeshBasicMaterial; //车身辅助材质
   chassisHelpChassis?: THREE.Mesh;
-  chassisModel?: GLTF;
-  wheelModel: THREE.Group<THREE.Object3DEventMap>[] = [];
-  wheels: any[];
+  chassisModel?: GLTF; //车身模型
+  wheelModels: THREE.Group<THREE.Object3DEventMap>[] = []; //轮子模型
+  wheelHelpModels: THREE.Mesh[] = []; //轮子辅助模型
+  wheelPhysicsBodies: CANNON.Body[] = []; //轮子物理模型
+
   chassisDimension: { x: number; y: number; z: number };
   wheelScale: { frontWheel: number; hindWheel: number };
   chassisModelPos: Pos;
+  wheelPos: [number, number, number][] = [
+    [0.75, 0.1, -1.32],
+    [-0.78, 0.1, -1.32],
+    [0.75, 0.1, 1.25],
+    [-0.78, 0.1, 1.25],
+  ];
+
   controlOptions: {
     maxSteerVal: number;
     maxForce: number;
@@ -57,7 +68,6 @@ class VehicleService {
 
     this.wheelScale = { frontWheel: 0.67, hindWheel: 0.67 };
     this.chassisDimension = { x: 1.96, y: 1, z: 4.47 };
-    this.wheels = [];
     this.chassisModelPos = { x: 0, y: -0.59, z: 0 };
     this.controlOptions = {
       maxSteerVal: 0.5,
@@ -84,11 +94,11 @@ class VehicleService {
   }
   /*--------------------------------------- common ------------------------------------------*/
   public init() {
-    // this.loadModels();
+    this.setPlane();
     this.setChassis();
     this.setWheels();
-    // this.controls();
-    // this.update();
+    this.controls();
+    this.update();
     console.log("vehicle init done!");
   }
 
@@ -103,8 +113,8 @@ class VehicleService {
     gltfLoader.setDRACOLoader(dracoLoader);
     // 加载车身模型
     gltfLoader.load("/models/mclaren/draco/chassis.gltf", (gltf) => {
-      this.chassisModel = gltf;
-      this.chassis = gltf.scene;
+      this.chassisModel = gltf; //车身模型
+      this.chassis = gltf.scene; //车身模型
       this.chassisHelpChassisGeo = new THREE.BoxGeometry(1, 1, 1);
       this.chassisHelpChassisMat = new THREE.MeshBasicMaterial({
         color: 0xff0000,
@@ -134,10 +144,37 @@ class VehicleService {
             this.wheelScale!.frontWheel
           );
         }
-        this.wheelModel.push(model);
+        this.wheelModels.push(model);
         this.scene.add(model);
       });
     }
+  }
+
+  public setPlane() {
+    //model plane
+    const texture = new THREE.TextureLoader().load(
+      "/imgs/texture/texture.jpeg"
+    );
+    const planeHelpGeo = new THREE.PlaneGeometry(1000, 1000);
+    const planeHelpMat = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.DoubleSide,
+    });
+    const planeHelp = new THREE.Mesh(planeHelpGeo, planeHelpMat);
+    planeHelp.rotation.x = -Math.PI / 2;
+    this.scene.add(planeHelp);
+    //physics plane
+    const groundShape = new CANNON.Plane();
+    const groundBody = new CANNON.Body({
+      mass: 0,
+      material: new CANNON.Material({ friction: 0 }),
+    });
+    groundBody.addShape(groundShape);
+    groundBody.quaternion.setFromAxisAngle(
+      new CANNON.Vec3(1, 0, 0),
+      -Math.PI / 2
+    );
+    this.world.addBody(groundBody);
   }
 
   private setChassis() {
@@ -149,12 +186,12 @@ class VehicleService {
       )
     );
     const chassisBody = new CANNON.Body({
-      mass: 250,
-      material: new CANNON.Material({ friction: 0 }),
+      mass: 250, // 质量
+      material: new CANNON.Material({ friction: 0 }), // 摩擦力
     });
     chassisBody.addShape(chassisShape);
-
-    this.chassisHelpChassis?.scale.set(
+    this.chassisPhysicsBody = chassisBody;
+    this.chassisHelpChassis!.scale.set(
       this.chassisDimension.x,
       this.chassisDimension.y,
       this.chassisDimension.z
@@ -170,84 +207,88 @@ class VehicleService {
   }
 
   private setWheels() {
-    const options = {
-      radius: 0.34,
-      directionLocal: new CANNON.Vec3(0, -1, 0),
-      suspensionStiffness: 55,
-      suspensionRestLength: 0.5,
-      frictionSlip: 30,
-      dampingRelaxation: 2.3,
-      dampingCompression: 4.3,
-      maxSuspensionForce: 10000,
-      rollInfluence: 0.01,
-      axleLocal: new CANNON.Vec3(-1, 0, 0),
-      chassisConnectionPointLocal: new CANNON.Vec3(0, 0, 0),
-      maxSuspensionTravel: 1,
-      customSlidingRotationalSpeed: 30,
-    };
-
-    const setWheelChassisConnectionPoint = (
-      index: number,
-      position: CANNON.Vec3
-    ) => {
-      this.car!.wheelInfos[index].chassisConnectionPointLocal.copy(position);
-    };
-
-    const wheelPos: [number, number, number][] = [
-      [0.75, 0.1, -1.32],
-      [-0.78, 0.1, -1.32],
-      [0.75, 0.1, 1.25],
-      [-0.78, 0.1, 1.25],
-    ];
-
-    wheelPos.forEach((position, index) => {
-      const pos = new CANNON.Vec3(position[0], position[1], position[2]);
-      options.chassisConnectionPointLocal = pos;
+    this.wheelModels.forEach((wheel, index) => {
+      //set wheel model position
+      wheel.position.set(
+        this.wheelPos[index][0],
+        this.wheelPos[index][1],
+        this.wheelPos[index][2]
+      );
+      const options = {
+        radius: 0.34,
+        directionLocal: new CANNON.Vec3(0, -1, 0),
+        suspensionStiffness: 55,
+        suspensionRestLength: 0.5,
+        frictionSlip: 30,
+        dampingRelaxation: 2.3,
+        dampingCompression: 4.3,
+        maxSuspensionForce: 10000,
+        rollInfluence: 0.01,
+        axleLocal: new CANNON.Vec3(-1, 0, 0),
+        chassisConnectionPointLocal: new CANNON.Vec3(0, 0, 0),
+        maxSuspensionTravel: 1,
+        customSlidingRotationalSpeed: 30,
+      };
+      options.chassisConnectionPointLocal = new CANNON.Vec3(
+        this.wheelPos[index][0],
+        this.wheelPos[index][1],
+        this.wheelPos[index][2]
+      );
       this.car!.addWheel(options);
-      this.wheelModel[index]?.position.set(pos.x, pos.y, pos.z);
-    });
-    // return;
-    this.car?.wheelInfos.forEach((wheel, index) => {
+      //physics model
       const cylinderShape = new CANNON.Cylinder(
-        wheel.radius,
-        wheel.radius,
-        wheel.radius / 2,
+        options.radius,
+        options.radius,
+        options.radius / 2,
         20
       );
-
       const wheelBody = new CANNON.Body({
         mass: 1,
         material: new CANNON.Material({ friction: 0 }),
       });
-
       const quaternion = new CANNON.Quaternion().setFromEuler(
-        -Math.PI / 2,
         0,
-        0
+        0,
+        -Math.PI / 2
       );
       wheelBody.addShape(cylinderShape, new CANNON.Vec3(), quaternion);
-      (this.car!.wheelInfos[index] as any).wheelBody = wheelBody;
-      this.wheels.push({
-        helpWheelsGeo: new THREE.CylinderGeometry(
-          wheel.radius,
-          wheel.radius,
-          wheel.radius / 2,
-          20
-        ),
-      });
-      this.wheels[index].helpWheelsGeo.rotateZ(Math.PI / 2);
-      this.wheels[index].helpWheelsMat = new THREE.MeshBasicMaterial({
-        color: 0x00ffff,
+      this.world.addBody(wheelBody);
+      this.wheelPhysicsBodies.push(wheelBody);
+      //physics model helper
+      const wheelHelpWheelsGeo = new THREE.CylinderGeometry(
+        options.radius,
+        options.radius,
+        options.radius / 2,
+        20
+      );
+      const wheelHelpWheelsMat = new THREE.MeshBasicMaterial({
+        color: 0x00ff00,
         wireframe: true,
       });
-      this.wheels![index].helpWheels = new THREE.Mesh(
-        this.wheels![index].helpWheelsGeo,
-        this.wheels![index].helpWheelsMat
+      const wheelHelpWheels = new THREE.Mesh(
+        wheelHelpWheelsGeo,
+        wheelHelpWheelsMat
       );
-      this.wheels![index].helpWheels.position.copy(
-        this.car!.wheelInfos[index].chassisConnectionPointLocal
+      wheelHelpWheels.position.copy(options.chassisConnectionPointLocal);
+      wheelHelpWheels.quaternion.copy(quaternion);
+      this.scene.add(wheelHelpWheels);
+      this.wheelHelpModels.push(wheelHelpWheels);
+      //constraint
+      const wheelConstraint = new CANNON.ConeTwistConstraint(
+        this.car!.chassisBody,
+        wheelBody,
+        {
+          pivotA: new CANNON.Vec3(
+            this.wheelPos[index][0],
+            this.wheelPos[index][1],
+            this.wheelPos[index][2]
+          ),
+          axisA: new CANNON.Vec3(0, 1, 0),
+          pivotB: new CANNON.Vec3(0, 0, 0),
+          axisB: new CANNON.Vec3(0, 1, 0),
+        }
       );
-      this.scene.add(this.wheels![index].helpWheels);
+      this.world.addConstraint(wheelConstraint);
     });
   }
 
@@ -256,9 +297,13 @@ class VehicleService {
     window.addEventListener("keydown", (e) => {
       if (!keysPressed.includes(e.key.toLowerCase()))
         keysPressed.push(e.key.toLowerCase());
+      hindMovement();
+      console.log(keysPressed);
     });
     window.addEventListener("keyup", (e) => {
       keysPressed.splice(keysPressed.indexOf(e.key.toLowerCase()), 1);
+      hindMovement();
+      console.log(keysPressed);
     });
 
     const hindMovement = () => {
@@ -335,42 +380,21 @@ class VehicleService {
           this.car!.applyEngineForce(this.controlOptions.maxForce * 1, 3);
         } else stopCar();
       } else brake();
+      console.log(this.car!.chassisBody.position);
     };
   }
 
   private update() {
-    const updateWorld = () => {
-      if (this.car && this.chassis && this.wheels![0]) {
-        this.chassis.position.set(
-          this.car.chassisBody.position.x + this.chassisModelPos.x,
-          this.car.chassisBody.position.y + this.chassisModelPos.y,
-          this.car.chassisBody.position.z + this.chassisModelPos.z
-        );
-        this.chassis.quaternion.copy(this.car.chassisBody.quaternion);
-        this.chassisHelpChassis!.position.copy(this.car.chassisBody.position);
-        this.chassisHelpChassis!.quaternion.copy(
-          this.car.chassisBody.quaternion
-        );
-        for (let i = 0; i < 4; i++) {
-          if (this.wheels![i].helpWheels && this.car.wheelInfos[i]) {
-            this.car.updateWheelTransform(i);
-            this.wheels![i].position.copy(
-              this.car.wheelInfos[i].worldTransform.position
-            );
-            this.wheels![i].quaternion.copy(
-              this.car.wheelInfos[i].worldTransform.quaternion
-            );
-            this.wheels![i].helpWheels.position.copy(
-              this.car.wheelInfos[i].worldTransform.position
-            );
-            this.wheels![i].helpWheels.quaternion.copy(
-              this.car.wheelInfos[i].worldTransform.quaternion
-            );
-          }
-        }
-      }
-    };
-    this.world.addEventListener("postStep", updateWorld);
+    // const updateWorld = () => {
+    //   console.log("update");
+    //   // this.car!.updateVehicle(1 / 60);
+    //   // this.wheelModels.forEach((wheel, index) => {
+    //   //   const wheelBody = this.car!.wheels[index];
+    //   //   wheel.position.copy(wheelBody.position);
+    //   //   wheel.quaternion.copy(wheelBody.quaternion);
+    //   // });
+    // };
+    // this.world.addEventListener("postStep", updateWorld);
   }
 }
 
