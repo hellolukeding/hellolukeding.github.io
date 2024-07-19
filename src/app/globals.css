@@ -1,0 +1,50 @@
+@import "./fonts.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+body {
+  @apply bg-primary-light text-primary-dark;
+  background-image: linear-gradient(to right, black 1px, transparent 1px),
+    linear-gradient(to bottom, black 1px, transparent 1px),
+    linear-gradient(to right, #404040 1px, transparent 1px),
+    linear-gradient(to bottom, #404040 1px, transparent 1px);
+}
+
+body.dark {
+  @apply bg-primary-dark text-primary-light;
+
+  background-image: linear-gradient(to right, black 1px, transparent 1px),
+    linear-gradient(to bottom, black 1px, transparent 1px),
+    linear-gradient(to right, #404040 1px, transparent 1px),
+    linear-gradient(to bottom, #404040 1px, transparent 1px);
+}
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
