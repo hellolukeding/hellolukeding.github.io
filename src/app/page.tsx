@@ -1,7 +1,9 @@
+import WellCome from "@/components/client/WellCome";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      <p className="text-6xl">animation</p>
+    <main className="flex w-screen h-screen items-center justify-center">
+      <WellCome />
     </main>
   );
 }

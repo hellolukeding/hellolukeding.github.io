@@ -1,6 +1,9 @@
 import type { Config } from "tailwindcss";
 import Colors from "./.tailwind/Colors";
 const config: Config = {
+  presets: [
+    require("./.tailwind/animation.config")
+  ],
   darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -35,6 +38,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+  ],
 };
 export default config;

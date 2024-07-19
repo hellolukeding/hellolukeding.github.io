@@ -1,3 +1,4 @@
+"use client";
 import { lightingGenerate } from "@/utils/lightingGenerate";
 import { useEffect, useRef } from "react";
 
