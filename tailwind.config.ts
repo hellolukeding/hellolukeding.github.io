@@ -10,8 +10,20 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+
   theme: {
     extend: {
+      container: {
+        center: true,
+        padding: "2rem",
+        screens: {
+          "2xl": "1400px",
+        },
+      },
+      backdropFilter: {
+        'none': 'none',
+        'blur': 'blur(5px)',
+      },
       fontFamily: {
         dance: ['Dancing Script', 'sans-serif'], // 定义一个新的字体族
       },
@@ -38,7 +50,14 @@ const config: Config = {
       },
     },
   },
+  variants: {
+    backdropFilter: ['responsive'],
+  },
   plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+    require('tailwindcss-filters'),
   ],
 };
 export default config;

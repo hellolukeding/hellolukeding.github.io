@@ -5,18 +5,23 @@ const config: Config = {
   theme: {
     extend: {
       animation: {
-        "fadeIn": "fadeIn 0.5s ease-in-out forwards"
+        "fadeIn": "fadeIn 3s ease-in-out forwards"
       },
       keyframes: {
         "fadeIn":{
-          "from":{
+          "0%":{
             "opacity": "0",
             "transform": "translate3d(0, 100%, 0)"
           },
-          "to":{
+          "90%":{
+            "opacity": "0.5",
+            "transform": "translate3d(0, 0, 0)"
+          },
+          "100%":{
             "opacity": "1",
             "transform": "translate3d(0, 0, 0)"
           }
+
         }
       }
     },
