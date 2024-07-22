@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 9876",
-    "build": "next build",
-    "start": "next start",
+    "dev": "tsx ./scripts/beforeRun.ts && next dev -p 9876",
+    "build": "tsx ./scripts/beforeRun.ts && next build",
+    "start": "tsx ./scripts/beforeRun.ts && next start",
     "lint": "next lint",
     "test": "tsx ./scripts/beforeRun.ts"
   },
