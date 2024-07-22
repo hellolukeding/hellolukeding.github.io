@@ -7,9 +7,10 @@
     "build": "tsx ./scripts/beforeRun.ts && next build",
     "start": "tsx ./scripts/beforeRun.ts && next start",
     "lint": "next lint",
-    "test": "tsx ./scripts/beforeRun.ts"
+    "bfr": "tsx ./scripts/beforeRun.ts"
   },
   "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-toast": "^1.2.1",
     "alea": "^1.0.1",
     "class-variance-authority": "^0.7.0",
