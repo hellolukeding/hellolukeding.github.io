@@ -17,9 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/assets/favicon.ico" />
+      </head>
       <body className={inter.className+" "+"dark font-dance "}>
        {children}
       <Toaster />
+      <script src="/misc/time.js"></script>
       </body>
 
     </html>
