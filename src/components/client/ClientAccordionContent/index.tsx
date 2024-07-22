@@ -1,6 +1,7 @@
 "use client";
 
 import { AccordionContent } from "@/components/ui/accordion";
+import Link from "next/link";
 
 interface ClientAccordionContentProps {
   file: string;
@@ -10,14 +11,8 @@ const ClientAccordionContent: React.FC<ClientAccordionContentProps> = (
   props
 ) => {
   return (
-    <AccordionContent
-      onClick={(e) => {
-        e.stopPropagation;
-        console.log(props.file);
-      }}
-      className="cursor-pointer"
-    >
-      {props.file}
+    <AccordionContent className={`cursor-pointer hover:text-green-500`}>
+      <Link href={`/blog/${encodeURIComponent(props.file)}`}>{props.file}</Link>
     </AccordionContent>
   );
 };
