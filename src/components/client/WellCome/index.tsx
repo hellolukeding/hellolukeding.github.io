@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Describe from "../Describe";
-import Sticker from "../Sticker";
 import { runShader } from "./render";
 
 const WellCome: React.FC = (props) => {
@@ -19,7 +18,7 @@ const WellCome: React.FC = (props) => {
         ></canvas>
         <Describe />
 
-        <Sticker />
+        {/* <Sticker /> */}
       </article>
     </>
   );
