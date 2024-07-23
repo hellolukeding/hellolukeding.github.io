@@ -26,7 +26,7 @@ export default function RootLayout({
         </div>
         <AsideMd />
       </aside>
-      <article className="flex-1" >
+      <article className="flex-1 w-full h-full" >
       {children}
       </article>
     </main>

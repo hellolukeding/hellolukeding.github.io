@@ -27,7 +27,9 @@ const AsideMd = async () => {
             <AccordionItem value={item} key={item}>
               <AccordionTrigger>{item}</AccordionTrigger>
               {data[item].map((file) => {
-                return <ClientAccordionContent file={file} key={file} />;
+                return (
+                  <ClientAccordionContent type={item} file={file} key={file} />
+                );
               })}
             </AccordionItem>
           );
