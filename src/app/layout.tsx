@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/toaster";
+import "highlight.js/styles/github.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from 'next/script';

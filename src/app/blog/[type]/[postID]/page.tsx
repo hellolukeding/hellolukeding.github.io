@@ -1,7 +1,10 @@
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Terminal } from "lucide-react";
 import { MDXComponents } from "mdx/types";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import { serialize } from "next-mdx-remote/serialize";
 import rehypeHighlight from "rehype-highlight";
+import rehypeHighlightLine from "rehype-highlight-code-lines";
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import { getStaticMD } from "./api";
 import CodeBlock from "./comp";
@@ -25,7 +28,14 @@ export default async function PostIDPage({
         <aside className="h-full w-3/4 overflow-auto pb-28">
           <MDXRemote source={content} {...mdxSource} />
         </aside>
-        <aside className="h-full w-1/4 "></aside>
+        <aside className="h-full w-1/4 ">
+          <Alert>
+            <Terminal className="h-4 w-4" />
+            <AlertDescription>
+              {`预计阅读时间 ${Math.round(content.length / 400)} 分钟`}
+            </AlertDescription>
+          </Alert>
+        </aside>
       </article>
     </section>
   );
@@ -38,6 +48,7 @@ const mdxOptions: MdxOptions = {
     [
       // 代码块高亮
       rehypeHighlight,
+      rehypeHighlightLine,
     ],
     // 代码块自定义属性
     rehypeMdxCodeProps as any,
