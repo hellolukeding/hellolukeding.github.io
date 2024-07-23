@@ -1,5 +1,3 @@
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Terminal } from "lucide-react";
 import { MDXComponents } from "mdx/types";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import { serialize } from "next-mdx-remote/serialize";
@@ -14,7 +12,7 @@ export default async function PostIDPage({
 }: {
   params: { type: string; postID: string };
 }) {
-  const content = await getStaticMD(params.type, params.postID);
+  const [content, stat] = await getStaticMD(params.type, params.postID);
   const mdxSource = await renderMD(content);
   return (
     <section className="w-full h-full pt-5 pl-10">
@@ -23,19 +21,23 @@ export default async function PostIDPage({
         <b className="text-center mr-2">{params.type} ▲ </b>
         {decodeURIComponent(params.postID)}
       </h1>
-
-      <article className="w-full h-full flex pt-10">
-        <aside className="h-full w-3/4 overflow-auto pb-28">
+      <p className="pt-3 pb-3 text-pretty">
+        {`创建时间：${stat},  共计字数：${
+          content.length
+        },  预计阅读时间：${Math.round(content.length / 400)}分钟`}
+      </p>
+      <article className="w-full h-full flex pt-5">
+        <aside className="h-full w-full overflow-auto pb-28 pr-10">
           <MDXRemote source={content} {...mdxSource} />
         </aside>
-        <aside className="h-full w-1/4 ">
+        {/* <aside className="h-full w-1/4 ">
           <Alert>
             <Terminal className="h-4 w-4" />
             <AlertDescription>
               {`预计阅读时间 ${Math.round(content.length / 400)} 分钟`}
             </AlertDescription>
           </Alert>
-        </aside>
+        </aside> */}
       </article>
     </section>
   );
