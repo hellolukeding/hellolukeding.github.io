@@ -6,7 +6,8 @@ const config: Config = {
     extend: {
       animation: {
         "fadeIn": "fadeIn 3s ease-in-out forwards",
-        "moveDown": "moveDown 2s ease-in-out infinite"
+        "moveDown": "moveDown 2s ease-in-out infinite",
+        "shakeX": "shakeX 1.2s ease-in-out forwards",
       },
       keyframes: {
         "fadeIn":{
@@ -33,6 +34,23 @@ const config: Config = {
             "transform": "translateY(0)",
             "opacity": "1"
           }
+        },
+        "shakeX":{
+          "0%":{
+            "transform": "translate3d(0, 0, 0)"
+          },
+          "100%":{
+            "transform": "translate3d(0, 0, 0)"
+          },     
+          "10% ":{ "transform":" translate3d(-10px, 0, 0)"},
+          "30% ":{ "transform":" translate3d(-10px, 0, 0)"},
+          "50% ":{ "transform":" translate3d(-10px, 0, 0)"},
+          "70% ":{ "transform":" translate3d(-10px, 0, 0)"},
+          "90% ":{ "transform":" translate3d(-10px, 0, 0)"},
+          "20%":{ "transform":" translate3d(10px, 0, 0)"},
+          "40%":{ "transform":" translate3d(10px, 0, 0)"},
+          "60%":{ "transform":" translate3d(10px, 0, 0)"},
+          "80%":{ "transform":" translate3d(10px, 0, 0)"},
         }
       }
     },

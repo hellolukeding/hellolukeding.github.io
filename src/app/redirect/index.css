@@ -1,4 +1,11 @@
 .redirect-bg {
-  background: url("https://images4.alphacoders.com/129/thumb-1920-1299442.png");
+  background: url("https://assets.codepen.io/605876/black-bg-opt.jpeg?format=auto");
   background-size: cover;
+  background-position: center bottom;
+}
+
+.redirect-dock {
+  backdrop-filter: blur(4px);
+  background: rgba(37, 37, 37, 0.8);
+  box-shadow: 0 1px hsl(0 0% 100% / 0.5) inset;
 }
