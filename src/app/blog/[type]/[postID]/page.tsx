@@ -14,30 +14,26 @@ export default async function PostIDPage({
 }) {
   const [content, stat] = await getStaticMD(params.type, params.postID);
   const mdxSource = await renderMD(content);
+  console.log(mdxSource);
   return (
     <section className="w-full h-full pt-5 pl-10">
       {/* <MDXRemote source={content} /> */}
-      <h1 className="flex items-center justify-start text-2xl">
+      <h1 className="flex items-center justify-start text-2xl pb-5">
         <b className="text-center mr-2">{params.type} ▲ </b>
         {decodeURIComponent(params.postID)}
       </h1>
-      <p className="pt-3 pb-3 text-pretty">
+
+      <hr />
+      <p className="pt-2 text-pretty">
         {`创建时间：${stat},  共计字数：${
           content.length
         },  预计阅读时间：${Math.round(content.length / 400)}分钟`}
       </p>
-      <article className="w-full h-full flex pt-5">
-        <aside className="h-full w-full overflow-auto pb-28 pr-10">
-          <MDXRemote source={content} {...mdxSource} />
+      <article className="w-11/12 h-full flex pt-5">
+        <aside className="h-full w-full overflow-auto pb-28 pr-5">
+          <MDXRemote source={content} components={components} />
+          {/* <MDXRemote {...mdxSource} /> */}
         </aside>
-        {/* <aside className="h-full w-1/4 ">
-          <Alert>
-            <Terminal className="h-4 w-4" />
-            <AlertDescription>
-              {`预计阅读时间 ${Math.round(content.length / 400)} 分钟`}
-            </AlertDescription>
-          </Alert>
-        </aside> */}
       </article>
     </section>
   );
@@ -53,18 +49,22 @@ const mdxOptions: MdxOptions = {
       rehypeHighlightLine,
     ],
     // 代码块自定义属性
-    rehypeMdxCodeProps as any,
+    rehypeMdxCodeProps,
   ],
 };
 
-const renderMD = async (val: string) => {
+const renderMD = async (val: string): Promise<MDXRemoteProps> => {
   const mdxSource = await serialize(val, {
     mdxOptions: {
       ...mdxOptions,
-      // development: process.env.NODE_ENV === 'development',
+      development: process.env.NODE_ENV === "development",
     },
   });
-  return mdxSource;
+  return {
+    source: mdxSource,
+    // options: { mdxOptions },
+    components,
+  };
 };
 
 const components: MDXComponents = {

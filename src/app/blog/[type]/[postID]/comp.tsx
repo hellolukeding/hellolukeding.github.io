@@ -27,24 +27,15 @@ export default function CodeBlock({ filename, children }: Props) {
         {getCodeLanguage(children)}
       </div>
       <div
-        className="absolute bottom-2 right-2 cursor-pointer rounded bg-white p-1"
+        className="absolute bottom-2 right-2 cursor-pointer rounded bg-primary-dark text-[#3F7CAC] p-1"
         onClick={copyHandle}
       >
-        {!copied ? (
-          <MdiClipboard />
-        ) : (
-          <div className="relative">
-            <div className="absolute -left-16">
-              <div className="rounded bg-white px-1 text-xs italic text-green-400">
-                Copied!
-              </div>
-            </div>
-            <MdiClipboardCheck />
-          </div>
-        )}
+        {!copied ? <MdiClipboard /> : <MdiClipboardCheck />}
       </div>
       <pre className={`${filename ?? "pt-4"}`}>
-        <div ref={ref}>{children}</div>
+        <div ref={ref} className="overflow-hidden overflow-x-auto">
+          {children}
+        </div>
       </pre>
     </div>
   );
