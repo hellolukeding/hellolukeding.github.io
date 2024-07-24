@@ -5,3 +5,8 @@
   margin: 1rem 0;
   border-radius: 0.5rem;
 }
+
+.hljs {
+  background-color: #252525;
+  color: #f1f4ee;
+}

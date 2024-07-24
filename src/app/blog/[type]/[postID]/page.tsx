@@ -2,7 +2,7 @@ import { MDXComponents } from "mdx/types";
 import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
 import { serialize } from "next-mdx-remote/serialize";
 import rehypeHighlight from "rehype-highlight";
-import rehypeHighlightLine from "rehype-highlight-code-lines";
+
 import rehypeMdxCodeProps from "rehype-mdx-code-props";
 import { getStaticMD } from "./api";
 import CodeBlock from "./comp";
@@ -31,8 +31,8 @@ export default async function PostIDPage({
       </p>
       <article className="w-11/12 h-full flex pt-5">
         <aside className="h-full w-full overflow-auto pb-28 pr-5">
-          <MDXRemote source={content} components={components} />
-          {/* <MDXRemote {...mdxSource} /> */}
+          {/* <MDXRemote source={content} components={components} /> */}
+          <MDXRemote {...mdxSource} source={content} />
         </aside>
       </article>
     </section>
@@ -46,23 +46,25 @@ const mdxOptions: MdxOptions = {
     [
       // 代码块高亮
       rehypeHighlight,
-      rehypeHighlightLine,
     ],
     // 代码块自定义属性
     rehypeMdxCodeProps,
   ],
+  format: "md",
 };
 
 const renderMD = async (val: string): Promise<MDXRemoteProps> => {
   const mdxSource = await serialize(val, {
     mdxOptions: {
       ...mdxOptions,
+
       development: process.env.NODE_ENV === "development",
     },
+    parseFrontmatter: true,
   });
   return {
     source: mdxSource,
-    // options: { mdxOptions },
+    options: { mdxOptions },
     components,
   };
 };

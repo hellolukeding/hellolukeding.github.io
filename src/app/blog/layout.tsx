@@ -21,7 +21,9 @@ export default function RootLayout({
         {/* <h1 className="font-dance text-5xl w-full text-center mb-10">{"lukeding"}</h1> */}
         <div className="w-full flex items-center justify-center">
           <Link href="/blog">
-            <Image src={"/assets/imgs/bear.png"} alt="" className="scale-x-[-1]" width={150} height={100}/>
+            <Image src={"/assets/imgs/bear.png"} priority alt="" className="scale-x-[-1]" style={{
+              width: "auto",
+            }} width={"150"} height={"100"}/>
           </Link>
         </div>
         <AsideMd />
