@@ -5,7 +5,8 @@ const config: Config = {
   theme: {
     extend: {
       animation: {
-        "fadeIn": "fadeIn 3s ease-in-out forwards"
+        "fadeIn": "fadeIn 3s ease-in-out forwards",
+        "moveDown": "moveDown 2s ease-in-out infinite"
       },
       keyframes: {
         "fadeIn":{
@@ -21,7 +22,17 @@ const config: Config = {
             "opacity": "1",
             "transform": "translate3d(0, 0, 0)"
           }
-
+        },
+        "moveDown":{
+          "0%":{
+            "transform": "translateY(-100%)",
+            "opacity": "0"
+          },
+ 
+          "100%":{
+            "transform": "translateY(0)",
+            "opacity": "1"
+          }
         }
       }
     },

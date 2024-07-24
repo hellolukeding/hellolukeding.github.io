@@ -14,7 +14,6 @@ export default async function PostIDPage({
 }) {
   const [content, stat] = await getStaticMD(params.type, params.postID);
   const mdxSource = await renderMD(content);
-  console.log(mdxSource);
   return (
     <section className="w-full h-full pt-5 pl-10">
       {/* <MDXRemote source={content} /> */}

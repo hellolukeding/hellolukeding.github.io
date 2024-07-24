@@ -11,25 +11,8 @@ interface AudioPlayerProps {
 
 const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
   const aRef = useRef<HTMLAudioElement>(null);
-  const { toast } = useToast();
+  const { toast, dismiss } = useToast();
   useEffect(() => {
-    // const audio = aRef.current!;
-    // console.log(audio);
-    // const handleCanPlayThrough = () => {
-    //   // audio.muted = false;
-    //   // audio.play();
-    //   alert("done!");
-    //   toast({
-    //     title: "tips:",
-    //     description: "需要打开海浪白噪吗？",
-    //     action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
-    //     duration: 50000,
-    //   });
-    // };
-    // audio.addEventListener("canplaythrough", handleCanPlayThrough);
-    // return () => {
-    //   audio.removeEventListener("canplaythrough", handleCanPlayThrough);
-    // };
     if (aRef.current) {
       setTimeout(() => {
         toast({
@@ -50,6 +33,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = (props) => {
         });
       }, 1000);
     }
+    return () => {
+      dismiss();
+    };
   }, []);
   return (
     <>
