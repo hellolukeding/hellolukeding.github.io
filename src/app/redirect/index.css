@@ -9,3 +9,8 @@
   background: rgba(37, 37, 37, 0.8);
   box-shadow: 0 1px hsl(0 0% 100% / 0.5) inset;
 }
+
+.dock-scroll {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
