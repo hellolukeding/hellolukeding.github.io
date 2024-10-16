@@ -22,7 +22,10 @@
       <guid>https://yourwebsite.com/second-post</guid>
     </item>
     <!-- 可以添加更多的 <item> -->
-
+<follow_challenge>
+    <feedId>69184692519982080</feedId>
+    <userId>68846298809785344</userId>
+</follow_challenge>
   </channel>
 
 </rss>
