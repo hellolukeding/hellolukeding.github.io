@@ -1,1 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Your Blog Title</title>
+    <link>https://yourwebsite.com</link>
+    <description>A brief description of your blog</description>
+    <language>zh-cn</language>
+    <pubDate>Mon, 15 Oct 2023 00:00:00 +0000</pubDate>
+    <lastBuildDate>Mon, 15 Oct 2023 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>第一篇文章标题</title>
+      <link>https://yourwebsite.com/first-post</link>
+      <description>这是一篇文章的简要描述。</description>
+      <pubDate>Mon, 01 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://yourwebsite.com/first-post</guid>
+    </item>
+    <item>
+      <title>第二篇文章标题</title>
+      <link>https://yourwebsite.com/second-post</link>
+      <description>这是一篇文章的简要描述。</description>
+      <pubDate>Mon, 08 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://yourwebsite.com/second-post</guid>
+    </item>
+    <!-- 可以添加更多的 <item> -->
 
+  </channel>
+
+</rss>
